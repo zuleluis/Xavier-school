@@ -6,25 +6,76 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';  
 import TableRow from '@material-ui/core/TableRow';  
 import Paper from '@material-ui/core/Paper';
-import axios from 'axios';  
+import axios from 'axios'; 
+import { Redirect } from "react-router-dom"; 
+import { Container } from '@material-ui/core';
 
 class ListaEstudiantes extends Component {  
   constructor(props) {  
-    super(props)  
+    super(props)
+    var token = localStorage.getItem("ACCESS_TOKEN");  
     this.state = {  
-      EstudiantesData: []  
+      EstudiantesData: [],
+      isFetched: false,
+      error: null,
+      token: token  
     }  
   }  
   componentDidMount() {  
-    axios.get("http://localhost:5000/api/estudiantes/all")
-    .then(response => {  
-      console.log(response.data);  
-      this.setState({  
-        EstudiantesData: response.data  
-      });  
-    });  
+    axios.get("http://localhost:5000/api/estudiantes/all",{
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${this.state.token}`
+      }
+    })
+    .then(
+      (response) => {
+        if (response.status === 200) {
+          this.setState(
+            {
+              estudiantesData: response.data,
+              isFetched: true,
+              error: null,
+            }
+          )
+        } 
+      },
+      (error) => {
+        if (error.response.status === 401){
+          localStorage.removeItem("ACCESS_TOKEN");
+          this.setState(
+            {
+              token:''
+            }
+          )
+        }
+      }
+    );  
   }  
   render() {  
+    if (!this.state.token){
+      return(
+        <Redirect to = {
+          {
+            pathname:'*',
+            state:{
+              from: this.props.location
+            }
+          }
+        }
+        />
+      )
+    }
+
+    if (!this.state.isFetched){
+      return(
+        <Container>
+          <h1>Cargando...</h1>
+        </Container>
+      )
+    }
+
+
     const estudiantesData = this.state.EstudiantesData;  
     return (
       <TableContainer component={Paper}>
