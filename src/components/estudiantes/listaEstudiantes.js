@@ -16,6 +16,7 @@ const headCells = [
   { id: 'fechaNacimiento', numeric: false, label: 'Edad' },
   { id: 'fechaNacimiento', numeric: false, label: 'Fecha de Nacimiento' },
   { id: 'nssEstudiante', numeric: false, label: 'Numero de Seguro Social' },
+  { id: 'activoOInactivo', numeric: false, label: 'Status' },
 ]
 
 const useStyles = makeStyles((theme) => ({
@@ -119,6 +120,7 @@ export default function ListaEstudiantes () {
                     <TableCell>{getAge(item.fechaNacimiento)} años</TableCell>
                     <TableCell>{dateFormatter(item.fechaNacimiento)}</TableCell>
                     <TableCell>{item.nssEstudiante}</TableCell>
+                    <TableCell>{item.activoOInactivo === 1 ? "Activo" : "Inactivo"}</TableCell>
                   </TableRow>
                 );
               })}

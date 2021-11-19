@@ -11,7 +11,7 @@ export default function Home() {
                 imgText = "Xavier's School Studients"
                 Title = "Estudiantes"
                 Description = "Gestion de estudiantes"
-                link = "/lista-estudiantes"
+                link = "/estudiantes"
                 />
                 <Card
                     imgPath = "media/teachers.jpg"

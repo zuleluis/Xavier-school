@@ -6,14 +6,14 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-export default function Cards(props){
+export default function ExtendedCard(props){
   return (
-    <Card sx={{ maxWidth: 345 , margin: 1, boxShadow: 3}}>
+    <Card sx={{ margin: 1, boxShadow: 3}}>
       <Link to={props.link} style={{textDecoration:'none'}}>
       <CardActionArea>
         <CardMedia
           component="img"
-          height="150"
+          height="50"
           image= {props.imgPath}
           alt= {props.imgText}
         />
