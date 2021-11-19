@@ -11,8 +11,8 @@ const theme = createTheme({
       main: '#03506F',
       dark: '#0A043C',
       contrastText: '#FFFFFF',
-    }
-  },
+    },
+  }
 });
 
 const useStyles = makeStyles((theme) => ({
