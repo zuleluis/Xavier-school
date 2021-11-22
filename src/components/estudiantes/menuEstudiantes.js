@@ -1,17 +1,6 @@
 import React from "react";
 import ExtendedCard from "../ExtendedCard";
-import { makeStyles } from "@material-ui/core";
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    },
-    mainDiv: {
-      maxWidth: 1100,
-      width: "100%",
-      marginBottom: theme.spacing(4)
-    },
-  }));
+import useStyles from "../../styles/Styles";
 
 export default function MenuEstudiantes() {
     const classes = useStyles();
@@ -29,7 +18,7 @@ export default function MenuEstudiantes() {
                 imgText = "Add student"
                 Title = "Registro de estudiante"
                 Description = "Aqui debe ir algo de que agregas un estudiante y asi"
-                link = "nanai"
+                link = "/registro-estudiante"
             />
             <ExtendedCard
                 imgPath = "media/lessons.jpg"

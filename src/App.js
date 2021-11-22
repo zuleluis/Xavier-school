@@ -1,8 +1,10 @@
 import React from 'react'
 import NavBar from './components/NavBar'
-import { createTheme, ThemeProvider, makeStyles } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider} from '@material-ui/core/styles';
 import MainRoutes from './MainRoutes';
 import { BrowserRouter } from 'react-router-dom';
+import useStyles from './styles/Styles';
+
 
 const theme = createTheme({
   palette: {
@@ -14,18 +16,6 @@ const theme = createTheme({
     },
   }
 });
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  main: {
-    display: "flex",
-    justifyContent: "center",
-    margin: theme.spacing(5),
-    flexGrow:1
-  },
-}));
 
 export default function App() {
   const classes = useStyles();

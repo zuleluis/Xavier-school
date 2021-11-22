@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import ListaEstudiantes from './components/estudiantes/listaEstudiantes';
 import MenuEstudiantes from './components/estudiantes/menuEstudiantes';
+import RegistroEstudiante from './components/estudiantes/registroEstudiante';
 import Home from './components/Home';
 
 export default function MainRoutes() {
@@ -12,6 +13,9 @@ export default function MainRoutes() {
             </Route>
             <Route exact path="/lista-estudiantes">
                 <ListaEstudiantes/>
+            </Route>
+            <Route exact path="/registro-estudiante">
+                <RegistroEstudiante/>
             </Route>
             <Route exact path="/">
                 <Home/>

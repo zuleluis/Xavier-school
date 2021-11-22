@@ -16,6 +16,9 @@ const headCells = [
   { id: 'fechaNacimiento', numeric: false, label: 'Edad' },
   { id: 'fechaNacimiento', numeric: false, label: 'Fecha de Nacimiento' },
   { id: 'nssEstudiante', numeric: false, label: 'Numero de Seguro Social' },
+  { id: 'dormitorioEst', numeric: false, label: 'Piso' },
+  { id: 'dormitorioEst', numeric: false, label: 'Departamento' },
+  { id: 'nivelpoder', numeric: false, label: 'Nivel de Poder' },
   { id: 'activoOInactivo', numeric: false, label: 'Status' },
 ]
 
@@ -86,7 +89,7 @@ export default function ListaEstudiantes () {
     },[]);
 
     const dateFormatter = (date) => {
-      var formatter = new Intl.DateTimeFormat('en-mx', 'dd-MM-yyyy');
+      var formatter = new Intl.DateTimeFormat('en-mx', 'DD-MM-YYYY');
       return formatter.format(new Date (date));
     }
 
@@ -120,6 +123,9 @@ export default function ListaEstudiantes () {
                     <TableCell>{getAge(item.fechaNacimiento)} años</TableCell>
                     <TableCell>{dateFormatter(item.fechaNacimiento)}</TableCell>
                     <TableCell>{item.nssEstudiante}</TableCell>
+                    <TableCell>{item.dormitorioEst.Piso}</TableCell>
+                    <TableCell>{item.dormitorioEst.Departamento}</TableCell>
+                    <TableCell>{item.nivelpoder}</TableCell>
                     <TableCell>{item.activoOInactivo === 1 ? "Activo" : "Inactivo"}</TableCell>
                   </TableRow>
                 );
