@@ -15,10 +15,11 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import { visuallyHidden } from '@mui/utils';
 import SortTable from '../../SortTable';
-
+import TextField from '@mui/material/TextField';
+import RegistroPoder from '../../poderes/registroPoder';
 
 const headCells = [
-    { id: 'nombrePoder', numeric: false, label: 'Poder' },
+  { id: 'nombrePoder', numeric: false, label: 'Poder' },
 ]
 
 function EnhancedTableHead(props) {
@@ -123,6 +124,7 @@ export default function DatosPoderes() {
   const [orderBy, setOrderBy] = React.useState('idPoder');
   const [selected, setSelected] = React.useState([]);
   const [poderes,setPoderes] = useState([]);
+  const [rerender, setRerender] = useState(false);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -177,7 +179,7 @@ export default function DatosPoderes() {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+      <Paper sx={{ width: '100%' }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
@@ -193,8 +195,6 @@ export default function DatosPoderes() {
               rowCount={poderes.length}
             />
             <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                 rows.slice().sort(getComparator(order, orderBy)) */}
               {SortTable.stableSort(poderes, SortTable.getComparator(order, orderBy))
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.nombrePoder);
@@ -233,6 +233,7 @@ export default function DatosPoderes() {
             </TableBody>
           </Table>
         </TableContainer>
+        <RegistroPoder/>
       </Paper>
     </Box>
   );

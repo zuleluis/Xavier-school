@@ -5,7 +5,6 @@ import MainRoutes from './MainRoutes';
 import { BrowserRouter } from 'react-router-dom';
 import useStyles from './styles/Styles';
 
-
 const theme = createTheme({
   palette: {
     primary: {

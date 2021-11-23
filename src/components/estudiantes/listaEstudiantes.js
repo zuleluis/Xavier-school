@@ -8,7 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import SortTable from '../SortTable';
 import EnhancedTableHead from '../HeadSortTable';
-import { makeStyles } from '@material-ui/core/styles';
+import { visuallyHidden } from '@mui/utils';
 
 const headCells = [
   { id: 'nombreEstudiante', numeric: false, label: 'Nombre' },
@@ -16,41 +16,9 @@ const headCells = [
   { id: 'fechaNacimiento', numeric: false, label: 'Edad' },
   { id: 'fechaNacimiento', numeric: false, label: 'Fecha de Nacimiento' },
   { id: 'nssEstudiante', numeric: false, label: 'Numero de Seguro Social' },
-  { id: 'dormitorioEst', numeric: false, label: 'Piso' },
-  { id: 'dormitorioEst', numeric: false, label: 'Departamento' },
   { id: 'nivelpoder', numeric: false, label: 'Nivel de Poder' },
   { id: 'activoOInactivo', numeric: false, label: 'Status' },
 ]
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-  },
-  paper: {
-    width: '100%',
-    marginBottom: theme.spacing(2),
-    padding: theme.spacing(2)
-  },
-  table: {
-    minWidth: 750,
-    marginTop: theme.spacing(2),
-    border: "1px solid #ccc",
-  },
-  visuallyHidden: {
-    border: 0,
-    clip: 'rect(0 0 0 0)',
-    height: 1,
-    margin: -1,
-    overflow: 'hidden',
-    padding: 0,
-    position: 'absolute',
-    top: 20,
-    width: 1,
-  },
-  row: {
-    textDecoration: "none"
-  }
-}));
 
 export default function ListaEstudiantes () {  
   const [estudiantes,setEstudiantes] = useState([]);
@@ -58,7 +26,6 @@ export default function ListaEstudiantes () {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('idEstudiante');
-  const classes = useStyles();
  
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -105,7 +72,7 @@ export default function ListaEstudiantes () {
         <TableContainer>
           <Table sx={{ minWidth: 650 }} stickyHeader aria-label="sticky table">
             <EnhancedTableHead
-              classes={classes}
+              sx={visuallyHidden}
               order={order}
               orderBy={orderBy}
               headCells={headCells}
@@ -123,8 +90,6 @@ export default function ListaEstudiantes () {
                     <TableCell>{getAge(item.fechaNacimiento)} años</TableCell>
                     <TableCell>{dateFormatter(item.fechaNacimiento)}</TableCell>
                     <TableCell>{item.nssEstudiante}</TableCell>
-                    <TableCell>{item.dormitorioEst.Piso}</TableCell>
-                    <TableCell>{item.dormitorioEst.Departamento}</TableCell>
                     <TableCell>{item.nivelpoder}</TableCell>
                     <TableCell>{item.activoOInactivo === 1 ? "Activo" : "Inactivo"}</TableCell>
                   </TableRow>
