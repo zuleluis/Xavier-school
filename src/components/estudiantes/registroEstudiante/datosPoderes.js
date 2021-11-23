@@ -15,7 +15,7 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import { visuallyHidden } from '@mui/utils';
 import SortTable from '../../SortTable';
-import TextField from '@mui/material/TextField';
+//import TextField from '@mui/material/TextField';
 import RegistroPoder from '../../poderes/registroPoder';
 
 const headCells = [
@@ -123,8 +123,7 @@ export default function DatosPoderes() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('idPoder');
   const [selected, setSelected] = React.useState([]);
-  const [poderes,setPoderes] = useState([]);
-  const [rerender, setRerender] = useState(false);
+  const [poderes,setPoderes] = useState([]); 
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -175,7 +174,7 @@ export default function DatosPoderes() {
       .catch((err) => {
         console.log(err);
       });
-    },[]);
+    },);
 
   return (
     <Box sx={{ width: '100%' }}>

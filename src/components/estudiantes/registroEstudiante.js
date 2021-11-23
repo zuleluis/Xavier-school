@@ -8,9 +8,7 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
-//import DatosPersonales from './registroEstudiante/datosPersonales';
+import DatosPersonales from './registroEstudiante/datosPersonales';
 import DatosPoderes from './registroEstudiante/datosPoderes';
 
 const steps = ['Datos personales', 'Registro de poderes'];
@@ -18,50 +16,7 @@ const steps = ['Datos personales', 'Registro de poderes'];
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return (
-        <React.Fragment>
-          <Typography variant="h6" gutterBottom>
-            Datos Personales
-          </Typography>
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                id="nombreEstudiante"
-                label="Nombre"
-                fullWidth
-                variant="standard"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                id="apellidoEstudiante"
-                label="Apellido"
-                fullWidth
-                variant="standard"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                id="fechaNacimiento"
-                label="Fecha de nacimiento" 
-                type="date"
-                variant="standard"
-                InputLabelProps={{shrink: true}}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                id="nssEstudiante"
-                label="NSS"
-                variant="standard"
-              />
-            </Grid>
-          </Grid>
-        </React.Fragment>
-      );
+      return <DatosPersonales/>;
     case 1:
       return <DatosPoderes />;
     default:
