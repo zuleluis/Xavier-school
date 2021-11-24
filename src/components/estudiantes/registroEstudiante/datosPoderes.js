@@ -119,11 +119,12 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function DatosPoderes() {
+export default function DatosPoderes(props) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('idPoder');
   const [selected, setSelected] = React.useState([]);
   const [poderes,setPoderes] = useState([]); 
+  const [refresh, setRefresh] = useState(true)
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -131,7 +132,29 @@ export default function DatosPoderes() {
     setOrderBy(property);
   };
 
+  var all = [];
+  function handleInputText2 () {
+    console.log("Selecciona todo")
+
+    const all = poderes.map(p => p.idPoder);
+
+    if (all.length > props.datos.poderes.length) {
+      props.datos.poderes = all
+    } else {
+      props.datos.poderes = []
+    }
+
+    props.setDatos({
+      ...props.datos,
+      "poderes" : props.datos.poderes
+    })
+    console.log(props.datos.poderes)
+  };
+
   const handleSelectAllClick = (event) => {
+
+    handleInputText2()
+
     if (event.target.checked) {
       const newSelecteds = poderes.map((n) => n.nombrePoder);
       setSelected(newSelecteds);
@@ -164,7 +187,8 @@ export default function DatosPoderes() {
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/poderes/all")
+    if (refresh){
+      fetch("http://localhost:5000/api/poderes/all")
       .then((res) => {
         return res.json();
       })
@@ -174,7 +198,28 @@ export default function DatosPoderes() {
       .catch((err) => {
         console.log(err);
       });
-    }, []);
+      setRefresh(false);
+    }
+  });
+
+  const handleInputText = (event) => {
+    //console.log(event.target.value)
+    var index = props.datos.poderes.indexOf(parseInt(event.target.value))
+    if (index == -1) {
+      props.datos.poderes = props.datos.poderes.concat([parseInt(event.target.value)])
+      console.log("Metio")
+    } else {
+      props.datos.poderes.splice(index, 1)
+      props.datos.poderes = props.datos.poderes.concat([])
+      console.log("Saco")
+    }
+    props.setDatos({
+      ...props.datos,
+      "poderes" : props.datos.poderes
+    })
+    console.log(props.datos.poderes)
+  };
+
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -189,6 +234,7 @@ export default function DatosPoderes() {
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
+              value={all}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={poderes.length}
@@ -196,8 +242,10 @@ export default function DatosPoderes() {
             <TableBody>
               {SortTable.stableSort(poderes, SortTable.getComparator(order, orderBy))
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.nombrePoder);
+                  var isItemSelected = isSelected(row.nombrePoder);
                   const labelId = `enhanced-table-checkbox-${index}`;
+
+                  isItemSelected = props.datos.poderes.indexOf(row.idPoder) === -1 ? false: true
 
                   return (
                     <TableRow
@@ -213,6 +261,8 @@ export default function DatosPoderes() {
                         <Checkbox
                           color="primary"
                           checked={isItemSelected}
+                          onChange={handleInputText}
+                          value={row.idPoder}
                           inputProps={{
                             'aria-labelledby': labelId,
                           }}
@@ -232,7 +282,7 @@ export default function DatosPoderes() {
             </TableBody>
           </Table>
         </TableContainer>
-        <RegistroPoder/>
+        <RegistroPoder setRefresh={setRefresh}/>
       </Paper>
     </Box>
   );

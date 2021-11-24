@@ -15,16 +15,14 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import StyledTableCell from '../../styles/tableStyles';
 
 export default function DetallesEstudiante() {
     const {idEstudiante} = useParams();
-
     const [estudiante, setEstudiante] = useState([{user: null}])
     const [poderes, setPoderes] = useState([])
     const [leccionespriv, setLeccionesPriv] = useState([{user: null}])
     const [leccionespub, setLeccionesPub] = useState([{user: null}])
-    const [presentaciones, setPresentaciones] = useState([{user: null}])
+    const [presentaciones, setPresentaciones] = useState([])
 
 
 
@@ -133,19 +131,20 @@ export default function DetallesEstudiante() {
 
             <Accordion>
                 <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMoreIcon sx={{color: "white"}}/>}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
+                    sx={{backgroundColor: "#0A043C"}}
                 >
-                    <Typography>Datos de poderes</Typography>
+                    <Typography sx={{color: "white"}}>Datos de poderes</Typography>
                 </AccordionSummary>
               <AccordionDetails>
                 <TableContainer component={Paper}>
                   <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        <StyledTableCell>Poderes</StyledTableCell>
-                      </TableRow>
+                    <TableHead sx={{backgroundColor: "#03506F", color:"white"}}>
+                        <Typography variant="h5" component="div" margin={2}>
+                          Poderes
+                        </Typography>
                     </TableHead>
                     <TableBody>
                       {poderes.map((row) => (
@@ -164,17 +163,18 @@ export default function DetallesEstudiante() {
 
             <Accordion>
                 <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMoreIcon sx={{color: "white"}}/>}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
+                    sx={{backgroundColor: "#0A043C"}}
                 >
-                    <Typography>Lecciones tomadas</Typography>
+                    <Typography sx={{color: "white"}}>Lecciones tomadas</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Grid container>
-                    <Card sx={{margin: 1, boxShadow: 3}}>
+                    <Card sx={{margin: 1, boxShadow: 3, backgroundColor: "#03506F", color:"white"}}>
                       <CardContent>
-                        <Typography variant="h5" component="div">
+                        <Typography variant="h5" component="div" margin={2}>
                           Lecciones públicas
                         </Typography>
 
@@ -205,9 +205,9 @@ export default function DetallesEstudiante() {
                       </CardContent>
                     </Card>
                   
-                    <Card sx={{margin: 1, boxShadow: 3}}>
+                    <Card sx={{margin: 1, boxShadow: 3, backgroundColor: "#03506F", color:"white"}}>
                       <CardContent>
-                        <Typography variant="h5" component="div">
+                        <Typography variant="h5" component="div" margin={2}>
                           Lecciones Privadas
                         </Typography>
 
@@ -243,15 +243,16 @@ export default function DetallesEstudiante() {
 
             <Accordion>
                 <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMoreIcon sx={{color: "white"}}/>}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
+                    sx={{backgroundColor: "#0A043C"}}
                 >
-                    <Typography>Presentaciones</Typography>
+                    <Typography sx={{color: "white"}}>Presentaciones</Typography>
                 </AccordionSummary>
               <AccordionDetails>
                 <Typography>
-                  <Card sx={{margin: 1, boxShadow: 3}}>
+                  <Card sx={{margin: 1, boxShadow: 3, backgroundColor: "#03506F", color:"white"}}>
                     <CardContent>
                       <TableContainer component={Paper}>
                         <Table aria-label="simple table">
@@ -266,11 +267,11 @@ export default function DetallesEstudiante() {
                           <TableBody>
                             {presentaciones.map((row) => (
                               <TableRow
-                                key={row.idPresentacion}>
-                                <TableCell component="th" scope="row"> {row.nombrePresentacion}</TableCell>
-                                <TableCell component="th" scope="row"> {row.horaPresentacion}</TableCell>
-                                <TableCell component="th" scope="row"> {dateFormatter(row.fechaPresentacion)}</TableCell>
-                                <TableCell component="th" scope="row"> {row.nombrePresentacion}</TableCell>
+                                key={row.estudiante.idPresentacion}>
+                                <TableCell component="th" scope="row"> {row.estudiante.nombrePresentacion}</TableCell>
+                                <TableCell component="th" scope="row"> {row.estudiante.horaPresentacion}</TableCell>
+                                <TableCell component="th" scope="row"> {dateFormatter(row.estudiante.fechaPresentacion)}</TableCell>
+                                <TableCell component="th" scope="row"> {(row.asistencia) === 1 ? "Participó" : "--"}</TableCell>
                               </TableRow>
                             ))}
                           </TableBody>

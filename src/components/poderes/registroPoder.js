@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import axios from 'axios';
 import { Container, FormGroup, Button, Input, Form, Label, Col} from 'reactstrap';
 
-export default function RegistroPoder (){
+export default function RegistroPoder (props){
     const [poder, setPoder] = useState('');
 
     const add = () => {
@@ -20,6 +20,7 @@ export default function RegistroPoder (){
             (response) => {
                 if (response.status === 200) {
                     setPoder('')
+                    props.setRefresh(true)
                 };
             },
             (error) => {

@@ -10,27 +10,71 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import DatosPersonales from './registroEstudiante/datosPersonales';
 import DatosPoderes from './registroEstudiante/datosPoderes';
+import axios from 'axios';
 
 const steps = ['Datos personales', 'Registro de poderes'];
-
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <DatosPersonales/>;
-    case 1:
-      return <DatosPoderes />;
-    default:
-      throw new Error('Paso desconocido');
-  }
-}
 
 const theme = createTheme();
 
 export default function RegistroEstudiante() {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [datos, setDatos] = React.useState({
+    nombreEst : "",
+    apellidoEst : "",
+    nssEst : "",
+    fechaEst : "",
+    nivelEst : "",
+    poderes : []
+  });
+
+
+  function getStepContent(step) {
+    switch (step) {
+      case 0:
+        return <DatosPersonales setDatos={setDatos} datos={datos}/>;
+      case 1:
+        return <DatosPoderes setDatos={setDatos} datos={datos}/>;
+      default:
+        throw new Error('Paso desconocido');
+    }
+  }
+
+  const saveEstudiante = () => {
+    var bool;
+    axios.post ("http://localhost:5000/api/estudiantes/save", {
+      estudiante:  {
+        nombreEstudiante: datos.nombreEst,
+        apellidoEstudiante: datos.apellidoEst,
+        fechaNacimiento: datos.fechaEst,
+        nssEstudiante: datos.nssEst,
+        activoOInactivo: 1,
+        fkNivelpoderEst: datos.nivelEst
+      },
+      powers: datos.poderes
+    },
+    {
+      headers : {
+        'Content-type': 'application/json'
+      }
+    }).then ((response) => {
+      if (response.status === 200) {
+        bool = true;
+      }
+    }, (error) => {
+      console.log(error);
+      bool = false;
+    })
+    return bool;
+  }
 
   const handleNext = () => {
+    if (activeStep + 1 === steps.length) {
+      if (!saveEstudiante()){
+        return;
+      }
+    }
     setActiveStep(activeStep + 1);
+    console.log(datos.apellidoEst)
   };
 
   const handleBack = () => {
@@ -85,6 +129,7 @@ export default function RegistroEstudiante() {
             )}
           </React.Fragment>
         </Paper>
+        <Typography>{datos.nombreEst} | {datos.apellidoEst} | {datos.fechaEst} | {datos.nssEst} | {datos.poderes} | {datos.nivelEst}</Typography>
       </Container>
     </ThemeProvider>
   );

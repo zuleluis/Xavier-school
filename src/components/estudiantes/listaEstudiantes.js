@@ -11,6 +11,7 @@ import EnhancedTableHead from '../HeadSortTable';
 import { visuallyHidden } from '@mui/utils';
 import Button from '@mui/material/Button'
 import { Link } from 'react-router-dom';
+import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 
 const headCells = [
   { id: 'nombreEstudiante', numeric: false, label: 'Nombre' },
@@ -22,6 +23,14 @@ const headCells = [
   { id: 'activoOInactivo', numeric: false, label: 'Status' },
   { id: 'acciones', numeric: false, label: 'Acciones' },
 ]
+
+const theme = createTheme({
+  palette: {
+    secondary: {
+      main: '#03506F'
+    }
+  }
+});
 
 export default function ListaEstudiantes (props) {  
   const [estudiantes,setEstudiantes] = useState([]);
@@ -96,7 +105,7 @@ export default function ListaEstudiantes (props) {
                     <TableCell>{item.nivelpoder}</TableCell>
                     <TableCell>{item.activoOInactivo === 1 ? "Activo" : "Inactivo"}</TableCell>
                     <TableCell>
-                      <Button variant="contained" component={Link} to={`/estudiantes/detalles/${item.idEstudiante}`}>
+                      <Button variant="contained" component={Link} to={`/estudiantes/detalles/${item.idEstudiante}`} sx={{backgroundColor: "#03506F", color:"white"}}>
                         Detalles
                       </Button>
                     </TableCell>
