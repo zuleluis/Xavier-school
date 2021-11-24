@@ -174,7 +174,7 @@ export default function DatosPoderes() {
       .catch((err) => {
         console.log(err);
       });
-    },);
+    }, []);
 
   return (
     <Box sx={{ width: '100%' }}>

@@ -4,7 +4,7 @@ import ListaEstudiantes from './components/estudiantes/listaEstudiantes';
 import MenuEstudiantes from './components/estudiantes/menuEstudiantes';
 import Home from './components/Home';
 import RegistroEstudiante from './components/estudiantes/registroEstudiante'
-
+import DetallesEstudiante from './components/estudiantes/detallesEstudiante';
 
 export default function MainRoutes() {
     return(
@@ -17,6 +17,9 @@ export default function MainRoutes() {
             </Route>
             <Route exact path="/registro-estudiante">
                 <RegistroEstudiante/>
+            </Route>
+            <Route path="/estudiantes/detalles/:idEstudiante" >
+                <DetallesEstudiante/>
             </Route>
             <Route exact path="/">
                 <Home/>

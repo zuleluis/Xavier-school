@@ -10,6 +10,7 @@
     "@mui/icons-material": "^5.1.1",
     "@mui/material": "^5.1.1",
     "@mui/styled-engine": "^5.1.1",
+    "@mui/utils": "^5.2.0",
     "@mui/x-data-grid": "^5.0.1",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^11.2.7",

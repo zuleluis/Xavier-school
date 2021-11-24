@@ -9,6 +9,8 @@ import TablePagination from '@mui/material/TablePagination';
 import SortTable from '../SortTable';
 import EnhancedTableHead from '../HeadSortTable';
 import { visuallyHidden } from '@mui/utils';
+import Button from '@mui/material/Button'
+import { Link } from 'react-router-dom';
 
 const headCells = [
   { id: 'nombreEstudiante', numeric: false, label: 'Nombre' },
@@ -18,9 +20,10 @@ const headCells = [
   { id: 'nssEstudiante', numeric: false, label: 'Numero de Seguro Social' },
   { id: 'nivelpoder', numeric: false, label: 'Nivel de Poder' },
   { id: 'activoOInactivo', numeric: false, label: 'Status' },
+  { id: 'acciones', numeric: false, label: 'Acciones' },
 ]
 
-export default function ListaEstudiantes () {  
+export default function ListaEstudiantes (props) {  
   const [estudiantes,setEstudiantes] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -92,6 +95,11 @@ export default function ListaEstudiantes () {
                     <TableCell>{item.nssEstudiante}</TableCell>
                     <TableCell>{item.nivelpoder}</TableCell>
                     <TableCell>{item.activoOInactivo === 1 ? "Activo" : "Inactivo"}</TableCell>
+                    <TableCell>
+                      <Button variant="contained" component={Link} to={`/estudiantes/detalles/${item.idEstudiante}`}>
+                        Detalles
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 );
               })}
