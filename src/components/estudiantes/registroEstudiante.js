@@ -8,8 +8,8 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import DatosPersonales from './registroEstudiante/datosPersonales';
-import DatosPoderes from './registroEstudiante/datosPoderes';
+import DatosPersonales from './controlesEstudiante/datosPersonales';
+import DatosPoderes from './controlesEstudiante/datosPoderes';
 import axios from 'axios';
 
 const steps = ['Datos personales', 'Registro de poderes'];

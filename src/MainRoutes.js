@@ -5,6 +5,7 @@ import MenuEstudiantes from './components/estudiantes/menuEstudiantes';
 import Home from './components/Home';
 import RegistroEstudiante from './components/estudiantes/registroEstudiante'
 import DetallesEstudiante from './components/estudiantes/detallesEstudiante';
+import EditarEstudiante from './components/estudiantes/editarEstudiante';
 
 export default function MainRoutes() {
     return(
@@ -12,14 +13,17 @@ export default function MainRoutes() {
             <Route exact path="/estudiantes">
                 <MenuEstudiantes/>
             </Route>
-            <Route exact path="/lista-estudiantes">
+            <Route exact path="/estudiantes/lista">
                 <ListaEstudiantes/>
             </Route>
-            <Route exact path="/registro-estudiante">
+            <Route exact path="/estudiantes/registro">
                 <RegistroEstudiante/>
             </Route>
             <Route path="/estudiantes/detalles/:idEstudiante" >
                 <DetallesEstudiante/>
+            </Route>
+            <Route path="/estudiantes/editar" >
+                <EditarEstudiante/>
             </Route>
             <Route exact path="/">
                 <Home/>

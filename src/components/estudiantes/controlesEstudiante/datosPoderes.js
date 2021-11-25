@@ -15,7 +15,6 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import { visuallyHidden } from '@mui/utils';
 import SortTable from '../../SortTable';
-//import TextField from '@mui/material/TextField';
 import RegistroPoder from '../../poderes/registroPoder';
 
 const headCells = [

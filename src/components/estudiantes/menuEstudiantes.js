@@ -11,21 +11,21 @@ export default function MenuEstudiantes() {
             imgText = "Student's list"
             Title = "Lista de estudiantes"
             Description = "Consulta de estudiantes"
-            link = "/lista-estudiantes"
+            link = "/estudiantes/lista"
             />
             <ExtendedCard
                 imgPath = "media/teachers.jpg"
                 imgText = "Add student"
                 Title = "Registro de estudiante"
                 Description = "Aqui debe ir algo de que agregas un estudiante y asi"
-                link = "/registro-estudiante"
+                link = "/estudiantes/registro"
             />
             <ExtendedCard
                 imgPath = "media/lessons.jpg"
                 imgText = "Modify student"
-                Title = "Actualizar datos de estudiante"
-                Description = "Un choro de modificar estudiantes"
-                link = "nelpas"
+                Title = "Editar datos de estudiante"
+                Description = "Algo de editar datos"
+                link = "/estudiantes/editar"
             />
             <ExtendedCard
                 imgPath = "media/presentations.jpg"
