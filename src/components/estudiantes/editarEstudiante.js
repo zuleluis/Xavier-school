@@ -8,8 +8,13 @@ import DatosPersonales from './controlesEstudiante/datosPersonales';
 import DatosPoderes from './controlesEstudiante/datosPoderes';
 import axios from 'axios';
 import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button'
-import { Redirect } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Switch from '@mui/material/Switch';
+import { Checkbox, Select } from '@mui/material';
 
 
 const steps = ['Datos personales', 'Registro de poderes'];
@@ -17,43 +22,89 @@ const steps = ['Datos personales', 'Registro de poderes'];
 const theme = createTheme();
 
 export default function RegistroEstudiante() {
-  const {idEstudiante} = useParams();
-  const [estudiante, setEstudiante] = useState([{user: null}])
-  const [datos, setDatos] = React.useState({
+  const [idEstu, setIdEstu] = useState(0)
+  const [pinta, setPinta] = useState(true);
+  const [isFail, setIsFail] = useState(false);
+  const [disabledSwitch, setDisabledSwitch] = useState(true);
+  const [defaultChecked, setDefaultChecked] = useState(false)
+  const [failPoderes, setFailPoderes] = useState(false)
+  
+  const [datos, setDatos] = useState({
     nombreEst : "",
     apellidoEst : "",
     nssEst : "",
     fechaEst : "",
     nivelEst : "",
-    poderes : []
+    poderes : [],
+    activo : -1
   });
-  const [errorbd, setErrorbd] = useState(false);
 
-  useEffect(() => {
-    fetch(`http://localhost:5000/api/estudiantes/${idEstudiante}&1`)
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      setEstudiante(data)
-      setErrorbd(false);
-    })
-    .catch((err) => {
-      console.log(err);
-      setErrorbd(true);
+
+  const setValues = (data, data2) => {
+    var fecha = data.fechaNacimiento.substring(0, data.fechaNacimiento.indexOf("T"));
+    console.log(data.nssEstudiante)
+    setDatos({
+      nombreEst : data.nombreEstudiante,
+      apellidoEst : data.apellidoEstudiante,
+      fechaEst : fecha,
+      nivelEst : data.fkNivelpoderEst,
+      nssEst : data.nssEst,
+      poderes : data2.map(p => p.idPoder),
+      activo : data.activoOInactivo
     });
-  },[]);
+    setDefaultChecked(data.activoOInactivo == 1)
+    setPinta(true);
+  }
+  const buscaEstudinate = () => {
+    setPinta(false);
+    axios.get(`http://localhost:5000/api/estudiantes/${idEstu}&0`, {
+      headers : {
+        'Content-type': 'application/json'
+      }
+    }).then((response) => {
+      if (response.status === 200) {
+        //setEstudiante(response.data);
+        axios.get(`http://localhost:5000/api/estudiantes/poderes/${idEstu}`, {
+          headers : {
+            'Content-type': 'application/json'
+          }
+        }).then((response1) => {
+          if (response1.status === 200) {
+            //setPoderesEst(response1.data)
+            setValues(response.data, response1.data);
+            setDisabledSwitch(false);
+          }
+        }, (error1) => {
+          console.log(error1)
+        })
+      }
+
+    }, (error) => {
+      console.log(error);
+    });
+  };
+
+
+  function data() {
+    if (pinta) {
+      return <Container><DatosPersonales setDatos={setDatos} datos={datos} setIsFail={setIsFail} isFail={isFail}/>
+                <DatosPoderes setDatos={setDatos} datos={datos}/></Container>;
+    }
+    return <Container></Container>
+  }
+
+
+  const handleInputId = (event) => setIdEstu(event.target.value)
 
 
   const updateEstudiante = () => {
-    var bool;
-    axios.post ("http://localhost:5000/api/estudiantes/save", {
+    axios.post (`http://localhost:5000/api/estudiante/update/${idEstu}`, {
       estudiante:  {
         nombreEstudiante: datos.nombreEst,
         apellidoEstudiante: datos.apellidoEst,
         fechaNacimiento: datos.fechaEst,
         nssEstudiante: datos.nssEst,
-        activoOInactivo: 1,
+        activoOInactivo: datos.activoOInactivo,
         fkNivelpoderEst: datos.nivelEst
       },
       powers: datos.poderes
@@ -64,19 +115,38 @@ export default function RegistroEstudiante() {
       }
     }).then ((response) => {
       if (response.status === 200) {
-        bool = true;
-        setErrorbd(false);
+        console.log("Yeah men");
       }
     }, (error) => {
       console.log(error);
-      bool = false;
-      setErrorbd(true);
     })
-    return bool;
   }
 
-  if(errorbd) return <Redirect to='/error'/>;
+  const verificaAndRegistra = () => {
+    var bool = false;
+    if (datos.nombreEst==="" || datos.apellidoEst=== "" || datos.fechaEst ==="" || datos.nivelEst === "") {
+      setIsFail(true)
+      bool = true;
+    }
+    if (datos.poderes.length == 0) {
+      setFailPoderes(true);
+    }
+    if (bool)
+      return;
+    updateEstudiante();
+  }
 
+  const label = { inputProps: { 'aria-label': 'Switch demo' } };
+
+  const handleBajaAlta = () => {
+    if (datos.activoOInactivo !== 0) {
+      datos.activoOInactivo = 0
+    } else {
+      datos.activoOInactivo = 1
+    }
+    setDefaultChecked(datos.activoOInactivo === 1)
+    console.log(defaultChecked)
+  }
   return (
     <ThemeProvider theme={theme}>
       <Container>
@@ -88,18 +158,37 @@ export default function RegistroEstudiante() {
           <TextField
           required
           id="outlined-required"
-          label="Required"
-          defaultValue="Hello World"
+
+          onChange={handleInputId}
           />
 
-          <Button variant="contained" /*onClick={}*/ sx={{backgroundColor: "#03506F", color:"white"}}>
+          <Button variant="contained" onClick={buscaEstudinate} sx={{backgroundColor: "#03506F", color:"white"}}>
             Buscar Estudiante
           </Button>
+          
+          <Typography> Inactivo <Switch  checked={defaultChecked}/> Activo</Typography>
+          <Button variant="contained" onClick={handleBajaAlta} sx={{backgroundColor: "#03506F", color:"white"}} >{defaultChecked ? "Desactivar" : "Activar"}</Button>
 
-          <DatosPersonales setDatos={setDatos} datos={datos}/>
-          <DatosPoderes setDatos={setDatos} datos={datos}/>
+          {data()}
+          <Collapse in={failPoderes}>
+            <Alert
+              action={
+                <IconButton aria-label="close" color="inherit" size="small"
+                  onClick={() => {
+                    setFailPoderes(false);
+                  }}
+                >
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+              severity="error">This is an error alert — check it out!</Alert>
+          </Collapse>
+
+          <Button variant="contained" onClick={verificaAndRegistra} sx={{backgroundColor: "#03506F", color:"white"}}>
+            Registrar
+          </Button>
         </Paper>
-        <Typography>{datos.nombreEst} | {datos.apellidoEst} | {datos.fechaEst} | {datos.nssEst} | {datos.poderes} | {datos.nivelEst}</Typography>
+        <Typography>{datos.nombreEst} | {datos.apellidoEst} | {datos.fechaEst} | {datos.nssEst} | {datos.poderes} | {datos.nivelEst} ID: {idEstu}</Typography>
       </Container>
     </ThemeProvider>
   );
