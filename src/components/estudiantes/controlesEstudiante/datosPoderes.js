@@ -16,6 +16,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { visuallyHidden } from '@mui/utils';
 import SortTable from '../../SortTable';
 import RegistroPoder from '../../poderes/registroPoder';
+import { Redirect } from 'react-router-dom';
 
 const headCells = [
   { id: 'nombrePoder', numeric: false, label: 'Poder' },

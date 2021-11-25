@@ -9,7 +9,6 @@ import InputLabel from '@mui/material/InputLabel';
 import { FormControl } from '@mui/material';
 
 export default function DatosPersonales(props) {
-
   const handleInputText = (event) => {
     props.setDatos({
       ...props.datos,
@@ -37,6 +36,7 @@ export default function DatosPersonales(props) {
   },[])
 
   return (
+    props.datos.formSubmitted=true,
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
         Datos Personales
@@ -48,8 +48,9 @@ export default function DatosPersonales(props) {
             id="nombreEstudiante"
             label="Nombre"
             fullWidth
-            variant="standard"
+            variant="outlined"
             name = "nombreEst"
+            error={props.datos.nombreEst === "" && props.isFail}
             defaultValue={props.datos.nombreEst}
             onChange={handleInputText}
           />
@@ -60,50 +61,61 @@ export default function DatosPersonales(props) {
             id="apellidoEstudiante"
             label="Apellido"
             fullWidth
-            variant="standard"
+            variant="outlined"
             name = "apellidoEst"
+            error={props.datos.apellidoEst === "" && props.isFail}
             defaultValue={props.datos.apellidoEst}
             onChange={handleInputText}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="fechaNacimiento"
-            label="Fecha de nacimiento" 
-            type="date"
-            variant="standard"
-            name="fechaEst"
-            defaultValue={props.datos.fechaEst}
-            onChange={handleInputText}
-            InputLabelProps={{shrink: true}}
-          />
-        </Grid>
-        <Grid item xs={11} sm={6}>
-          <FormControl sx={{ m: 1, minWidth: 80 }}>
-            <InputLabel id="demo-simple-select-label">Nivel</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="nivel"
-              label="Nivel"
-              name="nivelEst"
-              defaultValue={props.datos.nivelEst}
-              onChange={handleInputText}
-            >
-              {niveles.map(n => {return (<MenuItem value={n.idNivel}>{n.nombreNivel}</MenuItem>)})}
-            </Select>
-          </FormControl>
-        </Grid>
 
-        <Grid item xs={12} >
-          <TextField
-            id="nssEstudiante"
-            label="NSS"
-            name="nssEst"
-            variant="standard"
-            defaultValue={props.datos.nssEst}
-            onChange={handleInputText}
-          />
+        <Grid container spacing={3} margin={1} justifyContent="space-between">
+          <Grid item xs={12} sm={5}>
+            <TextField
+              required
+              id="fechaNacimiento"
+              label="Fecha de nacimiento" 
+              type="date"
+              variant="outlined"
+              name="fechaEst"
+              defaultValue={props.datos.fechaEst}
+              error={props.datos.fechaEst === "" && props.isFail}
+              onChange={handleInputText}
+              InputLabelProps={{shrink: true}}
+              fullWidth
+            />
+          </Grid>
+          <Grid item>
+            <FormControl sx={{minWidth: 80 }} item xs={12} sm={5}>
+              <InputLabel id="demo-simple-select-label">Nivel</InputLabel>
+              <Select
+                required
+                labelId="demo-simple-select-label"
+                id="nivel"
+                label="Nivel"
+                name="nivelEst"
+                defaultValue={props.datos.nivelEst}
+                onChange={handleInputText}
+                error={props.datos.nivelEst === "" && props.isFail}
+                fullWidth
+              >
+                {niveles.map(n => {return (<MenuItem value={n.idNivel}>{n.nombreNivel}</MenuItem>)})}
+              </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12} sm={5}>
+            <TextField
+              id="nssEstudiante"
+              label="NSS"
+              name="nssEst"
+              variant="outlined"
+              defaultValue={props.datos.nssEst}
+              onChange={handleInputText}
+              fullWidth
+              inputProps={{ maxLength: 10 }}
+            />
+          </Grid>
         </Grid>
       </Grid>
     </React.Fragment>

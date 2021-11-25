@@ -11,6 +11,11 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import DatosPersonales from './controlesEstudiante/datosPersonales';
 import DatosPoderes from './controlesEstudiante/datosPoderes';
 import axios from 'axios';
+import Alert from '@mui/material/Alert';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import { Redirect } from 'react-router-dom';
 
 const steps = ['Datos personales', 'Registro de poderes'];
 
@@ -18,6 +23,8 @@ const theme = createTheme();
 
 export default function RegistroEstudiante() {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [isFail, setIsFail] = React.useState(false);
+  const [failPoderes, setFailPoderes] = React.useState(false);
   const [datos, setDatos] = React.useState({
     nombreEst : "",
     apellidoEst : "",
@@ -31,7 +38,7 @@ export default function RegistroEstudiante() {
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <DatosPersonales setDatos={setDatos} datos={datos}/>;
+          return <DatosPersonales setDatos={setDatos} datos={datos} setIsFail={setIsFail} isFail={isFail}/>
       case 1:
         return <DatosPoderes setDatos={setDatos} datos={datos}/>;
       default:
@@ -40,7 +47,6 @@ export default function RegistroEstudiante() {
   }
 
   const saveEstudiante = () => {
-    var bool;
     axios.post ("http://localhost:5000/api/estudiantes/save", {
       estudiante:  {
         nombreEstudiante: datos.nombreEst,
@@ -58,23 +64,30 @@ export default function RegistroEstudiante() {
       }
     }).then ((response) => {
       if (response.status === 200) {
-        bool = true;
+        setActiveStep(activeStep + 1)
       }
     }, (error) => {
       console.log(error);
-      bool = false;
     })
-    return bool;
   }
 
   const handleNext = () => {
     if (activeStep + 1 === steps.length) {
-      if (!saveEstudiante()){
+      if(datos.poderes.length===0){
+        setFailPoderes(true)
         return;
       }
+      saveEstudiante();
     }
-    setActiveStep(activeStep + 1);
-    console.log(datos.apellidoEst)
+    else{
+      if (activeStep + 1 === 1){
+        if (datos.nombreEst==="" || datos.apellidoEst=== "" || datos.fechaEst ==="" || datos.nivelEst === "") {
+          setIsFail(true)
+          return;
+        }
+      }
+      setActiveStep(activeStep + 1);
+    }
   };
 
   const handleBack = () => {
@@ -110,13 +123,27 @@ export default function RegistroEstudiante() {
             ) : (
               <React.Fragment>
                 {getStepContent(activeStep)}
+
+                <Collapse in={failPoderes}>
+                    <Alert
+                      action={
+                        <IconButton aria-label="close" color="inherit" size="small"
+                          onClick={() => {
+                            setFailPoderes(false);
+                          }}
+                        >
+                          <CloseIcon fontSize="inherit" />
+                        </IconButton>
+                      }
+                      severity="error">This is an error alert — check it out!</Alert>
+                  </Collapse>
+
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   {activeStep !== 0 && (
                     <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
                       Retroceder
                     </Button>
                   )}
-
                   <Button
                     variant="contained"
                     onClick={handleNext}

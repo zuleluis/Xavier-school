@@ -9,6 +9,7 @@ import DatosPoderes from './controlesEstudiante/datosPoderes';
 import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button'
+import { Redirect } from 'react-router-dom';
 
 
 const steps = ['Datos personales', 'Registro de poderes'];

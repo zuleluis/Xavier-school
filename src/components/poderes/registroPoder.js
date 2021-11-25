@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 //import { Button } from '@mui/material';
 import axios from 'axios';
 import { Container, FormGroup, Button, Input, Form, Label, Col} from 'reactstrap';
+import { Redirect } from 'react-router-dom';
 
 export default function RegistroPoder (props){
     const [poder, setPoder] = useState('');

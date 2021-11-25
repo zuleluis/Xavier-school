@@ -25,6 +25,9 @@ export default function MainRoutes() {
             <Route path="/estudiantes/editar" >
                 <EditarEstudiante/>
             </Route>
+            <Route path="/error">
+                <h1>ERROR 503: Oops! La página que buscas no está disponible :(</h1>
+            </Route>
             <Route exact path="/">
                 <Home/>
             </Route>
