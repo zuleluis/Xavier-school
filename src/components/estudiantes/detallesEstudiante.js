@@ -24,7 +24,7 @@ export default function DetallesEstudiante() {
     const [leccionespriv, setLeccionesPriv] = useState([{user: null}])
     const [leccionespub, setLeccionesPub] = useState([{user: null}])
     const [presentaciones, setPresentaciones] = useState([])
-
+    const [errorbd, setErrorbd] = useState(false);
 
 
     useEffect(() => {
@@ -32,9 +32,13 @@ export default function DetallesEstudiante() {
         .then((res) => {
           return res.json();
         })
-        .then((data) => {setEstudiante(data)})
+        .then((data) => {
+          setEstudiante(data)
+          setErrorbd(false);
+        })
         .catch((err) => {
           console.log(err);
+          setErrorbd(true);
         });
     },[]);
 
@@ -43,9 +47,13 @@ export default function DetallesEstudiante() {
       .then((res) => {
         return res.json();
       })
-      .then((data) => {setPoderes(data)})
+      .then((data) => {
+        setPoderes(data)
+        setErrorbd(false);
+      })
       .catch((err) => {
         console.log(err);
+        setErrorbd(true);
       });
     },[]);
 
@@ -54,9 +62,13 @@ export default function DetallesEstudiante() {
       .then((res) => {
         return res.json();
       })
-      .then((data) => {setLeccionesPub(data)})
+      .then((data) => {
+        setLeccionesPub(data)
+        setErrorbd(false);
+      })
       .catch((err) => {
         console.log(err);
+        setErrorbd(true);
       });
     },[]);
 
@@ -65,9 +77,13 @@ export default function DetallesEstudiante() {
       .then((res) => {
         return res.json();
       })
-      .then((data) => {setLeccionesPriv(data)})
+      .then((data) => {
+        setLeccionesPriv(data)
+        setErrorbd(false);
+      })
       .catch((err) => {
         console.log(err);
+        setErrorbd(true);
       });
     },[]);
 
@@ -76,9 +92,13 @@ export default function DetallesEstudiante() {
       .then((res) => {
         return res.json();
       })
-      .then((data) => {setPresentaciones(data)})
+      .then((data) => {
+        setPresentaciones(data)
+        setErrorbd(false);
+      })
       .catch((err) => {
         console.log(err);
+        setErrorbd(true);
       });
     },[]);
 
@@ -87,6 +107,8 @@ export default function DetallesEstudiante() {
         return date.split(['T'],[1])
       }
     }
+
+    if(errorbd) return <Redirect to='/error'/>;
 
     return (
         <div>

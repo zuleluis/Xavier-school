@@ -91,6 +91,7 @@ const EnhancedTableToolbar = (props) => {
             alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
         }),
       }}
+      sx={{backgroundColor: "#03506F", color:"white"}}
     >
       {numSelected > 0 ? (
         <Typography
@@ -125,6 +126,7 @@ export default function DatosPoderes(props) {
   const [selected, setSelected] = React.useState([]);
   const [poderes,setPoderes] = useState([]); 
   const [refresh, setRefresh] = useState(true)
+  const [errorbd, setErrorbd] = useState(false);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -194,18 +196,19 @@ export default function DatosPoderes(props) {
       })
       .then((data) => {
         setPoderes(data);
+        setErrorbd(false);
       })
       .catch((err) => {
         console.log(err);
+        setErrorbd(true);
       });
       setRefresh(false);
     }
   });
 
   const handleInputText = (event) => {
-    //console.log(event.target.value)
     var index = props.datos.poderes.indexOf(parseInt(event.target.value))
-    if (index == -1) {
+    if (index === -1) {
       props.datos.poderes = props.datos.poderes.concat([parseInt(event.target.value)])
       console.log("Metio")
     } else {
@@ -219,6 +222,8 @@ export default function DatosPoderes(props) {
     })
     console.log(props.datos.poderes)
   };
+
+  if(errorbd) return <Redirect to='/error'/>;
 
 
   return (
@@ -282,8 +287,8 @@ export default function DatosPoderes(props) {
             </TableBody>
           </Table>
         </TableContainer>
-        <RegistroPoder setRefresh={setRefresh}/>
       </Paper>
+      <RegistroPoder setRefresh={setRefresh}/>
     </Box>
   );
 }

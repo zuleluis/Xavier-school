@@ -16,6 +16,7 @@ import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Redirect } from 'react-router-dom';
+import { useState } from 'react';
 
 const steps = ['Datos personales', 'Registro de poderes'];
 
@@ -25,6 +26,7 @@ export default function RegistroEstudiante() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [isFail, setIsFail] = React.useState(false);
   const [failPoderes, setFailPoderes] = React.useState(false);
+  const [errorbd, setErrorbd] = useState(false);
   const [datos, setDatos] = React.useState({
     nombreEst : "",
     apellidoEst : "",
@@ -65,9 +67,11 @@ export default function RegistroEstudiante() {
     }).then ((response) => {
       if (response.status === 200) {
         setActiveStep(activeStep + 1)
+        setErrorbd(false);
       }
     }, (error) => {
       console.log(error);
+      setErrorbd(true);
     })
   }
 
@@ -93,6 +97,8 @@ export default function RegistroEstudiante() {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
+
+  if(errorbd) return <Redirect to='/error'/>;
 
   return (
     <ThemeProvider theme={theme}>

@@ -10,7 +10,7 @@ import SortTable from '../SortTable';
 import EnhancedTableHead from '../HeadSortTable';
 import { visuallyHidden } from '@mui/utils';
 import Button from '@mui/material/Button'
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 const headCells = [
   { id: 'nombreEstudiante', numeric: false, label: 'Nombre' },
@@ -29,6 +29,7 @@ export default function ListaEstudiantes (props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('idEstudiante');
+  const [errorbd, setErrorbd] = useState(false);
  
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -52,9 +53,11 @@ export default function ListaEstudiantes (props) {
         })
         .then((data) => {
           setEstudiantes(data);
+          setErrorbd(false);
         })
         .catch((err) => {
-          console.log(err);
+          console.log("Todo mal");
+          setErrorbd(true);
         });
     },[]);
 
@@ -69,6 +72,9 @@ export default function ListaEstudiantes (props) {
       const diff = d2.getTime() - d1.getTime();
       return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
     }
+
+     
+    if(errorbd) return <Redirect to='/error'/>;
 
     return (
       <Paper>

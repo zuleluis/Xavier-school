@@ -27,15 +27,20 @@ export default function RegistroEstudiante() {
     nivelEst : "",
     poderes : []
   });
+  const [errorbd, setErrorbd] = useState(false);
 
   useEffect(() => {
     fetch(`http://localhost:5000/api/estudiantes/${idEstudiante}&1`)
     .then((res) => {
       return res.json();
     })
-    .then((data) => {setEstudiante(data)})
+    .then((data) => {
+      setEstudiante(data)
+      setErrorbd(false);
+    })
     .catch((err) => {
       console.log(err);
+      setErrorbd(true);
     });
   },[]);
 
@@ -60,13 +65,17 @@ export default function RegistroEstudiante() {
     }).then ((response) => {
       if (response.status === 200) {
         bool = true;
+        setErrorbd(false);
       }
     }, (error) => {
       console.log(error);
       bool = false;
+      setErrorbd(true);
     })
     return bool;
   }
+
+  if(errorbd) return <Redirect to='/error'/>;
 
   return (
     <ThemeProvider theme={theme}>
