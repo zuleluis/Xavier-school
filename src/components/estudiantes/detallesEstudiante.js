@@ -16,6 +16,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Redirect } from 'react-router-dom';
+import LinkButton from '../linkButton';
 
 export default function DetallesEstudiante() {
     const {idEstudiante} = useParams();
@@ -112,40 +113,55 @@ export default function DetallesEstudiante() {
 
     return (
         <div>
+            <Grid container justifyContent="flex-end">
+              <LinkButton
+                link = '/estudiantes'
+                buttonText = "Estudiantes"
+                buttonColor = "#03506F"
+                size="small"
+              />
+
+              <LinkButton
+                link = '/'
+                buttonText = "Inicio"
+                buttonColor = "#03506F"
+                size="small"
+              />
+            </Grid>
             <Card sx={{ minWidth: 275 }}>
               <CardContent>
                 <Typography variant="h5" component="div">
                   {estudiante.nombreEstudiante} {estudiante.apellidoEstudiante}
                 </Typography>
-                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                <Typography sx={{ fontSize: 14, mb:3 }} color="text.secondary" gutterBottom>
                   Nombre del Estudiante
                 </Typography>
 
                 <Typography variant="h5" component="div">
                   {dateFormatter(estudiante.fechaNacimiento)}
                 </Typography>
-                <Typography sx={{ fontSize: 14}} color="text.secondary" gutterBottom>
+                <Typography sx={{ fontSize: 14, mb:3}} color="text.secondary" gutterBottom>
                   Fecha de Nacimiento
                 </Typography>
 
                 <Typography variant="h5" component="div">
-                  {estudiante.nssEstudiante}
+                  {estudiante.nssEstudiante === '' ? "--" : estudiante.nssEstudiante}
                 </Typography>
-                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                <Typography sx={{ fontSize: 14, mb:3}} color="text.secondary" gutterBottom>
                   Numero de Seguridad Social
                 </Typography>
 
                 <Typography variant="h5" component="div">
                   {estudiante.nivelpoder}
                 </Typography>
-                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                <Typography sx={{ fontSize: 14, mb:3}} color="text.secondary" gutterBottom>
                   Nivel de Poder
                 </Typography>
 
                 <Typography variant="h5" component="div">
                   {estudiante.activoOInactivo === 1 ? "Activo" : "Inactivo"}
                 </Typography>
-                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                <Typography sx={{ fontSize: 14, mb:3 }} color="text.secondary" gutterBottom>
                   Estatus
                 </Typography>
               

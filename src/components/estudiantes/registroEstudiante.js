@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Fragment, useState } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
@@ -16,18 +16,19 @@ import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Redirect } from 'react-router-dom';
-import { useState } from 'react';
+import LinkButton from '../linkButton';
+import { Grid } from '@mui/material';
 
 const steps = ['Datos personales', 'Registro de poderes'];
 
 const theme = createTheme();
 
 export default function RegistroEstudiante() {
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [isFail, setIsFail] = React.useState(false);
-  const [failPoderes, setFailPoderes] = React.useState(false);
+  const [activeStep, setActiveStep] = useState(0);
+  const [isFail, setIsFail] = useState(false);
+  const [failPoderes, setFailPoderes] = useState(false);
   const [errorbd, setErrorbd] = useState(false);
-  const [datos, setDatos] = React.useState({
+  const [datos, setDatos] = useState({
     nombreEst : "",
     apellidoEst : "",
     nssEst : "",
@@ -114,20 +115,46 @@ export default function RegistroEstudiante() {
               </Step>
             ))}
           </Stepper>
-          <React.Fragment>
+          <Fragment>
             {activeStep === steps.length ? (
-              <React.Fragment>
-                <Typography variant="h5" gutterBottom>
-                  Estudiante registrado exitosamente
-                </Typography>
-                <Typography variant="subtitle1">
-                  ¡Bienvenido a Escuela Xavier para jóvenes talento!
-                  Esperamos que tu estancia sea la mejor. 
-                  ¡Mucho éxito en tu nueva etapa!
-                </Typography>
-              </React.Fragment>
+              <Fragment>
+                <Typography variant="h4"> Estudiante registrado exitosamente </Typography>
+
+                <Typography sx={{mb:2}}> Los siguientes datos fueron registrados: </Typography>
+          
+                <Typography variant="h5" component="div"> {datos.nombreEst} {datos.apellidoEst} </Typography>
+                <Typography sx={{ fontSize: 14, mb:3 }} color="text.secondary" gutterBottom> Nombre </Typography>
+
+                <Typography variant="h5" component="div"> {datos.nivelEst} </Typography>
+                <Typography sx={{ fontSize: 14, mb:3 }} color="text.secondary" gutterBottom> Nivel de poder </Typography>
+
+                <Typography variant="h5" component="div"> {datos.fechaEst} </Typography>
+                <Typography sx={{ fontSize: 14, mb:3 }} color="text.secondary" gutterBottom> Fecha de Nacimiento </Typography>
+
+                <Typography variant="h5" component="div"> {datos.nssEst === '' ? "--" : datos.nssEst} </Typography>
+                <Typography sx={{ fontSize: 14, mb:3 }} color="text.secondary" gutterBottom> Número de Seguridad Social </Typography>
+
+                <Typography variant="h5" component="div"> {datos.poderes.length} </Typography>
+                <Typography sx={{ fontSize: 14, mb:3 }} color="text.secondary" gutterBottom> Cantidad de poderes </Typography>
+
+                <Grid container>
+                  <LinkButton
+                    link = '/estudiantes'
+                    buttonText = "Estudiantes"
+                    buttonColor = "#03506F"
+                    size="small"
+                  />
+
+                  <LinkButton
+                    link = '/'
+                    buttonText = "Inicio"
+                    buttonColor = "#03506F"
+                    size="small"
+                  />
+                </Grid>
+              </Fragment>
             ) : (
-              <React.Fragment>
+              <Fragment>
                 {getStepContent(activeStep)}
 
                 <Collapse in={failPoderes}>
@@ -147,23 +174,22 @@ export default function RegistroEstudiante() {
 
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   {activeStep !== 0 && (
-                    <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
+                    <Button onClick={handleBack} sx={{ mt: 3, ml: 1, color: "#03506F" }}>
                       Retroceder
                     </Button>
                   )}
                   <Button
                     variant="contained"
                     onClick={handleNext}
-                    sx={{ mt: 3, ml: 1 }}
+                    sx={{ mt: 3, ml: 1, backgroundColor: "#03506F" }}
                   >
                     {activeStep === steps.length - 1 ? 'Registrar' : 'Siguiente'}
                   </Button>
                 </Box>
-              </React.Fragment>
+              </Fragment>
             )}
-          </React.Fragment>
+          </Fragment>
         </Paper>
-        <Typography>{datos.nombreEst} | {datos.apellidoEst} | {datos.fechaEst} | {datos.nssEst} | {datos.poderes} | {datos.nivelEst}</Typography>
       </Container>
     </ThemeProvider>
   );
