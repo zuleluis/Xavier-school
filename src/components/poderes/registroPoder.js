@@ -1,25 +1,16 @@
-import React, { useState } from 'react'  
-//import Grid from '@mui/material/Grid';
-//import TextField from '@mui/material/TextField';
-import { Typography } from '@mui/material';
+import { useState } from 'react'  
+import { TextField, Typography } from '@mui/material';
 import axios from 'axios';
-import { Container, FormGroup, Button, Input, Form, Label, Col} from 'reactstrap';
 import { Redirect } from 'react-router-dom';
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box } from '@mui/system';
+import Button from '@mui/material/Button'
+import { Grid } from '@mui/material';
 
 export default function RegistroPoder (props){
     const [poder, setPoder] = useState('');
     const [errorbd, setErrorbd] = useState(false);
-
-    const [expanded, setExpanded] = React.useState(false);
-
-    const handleChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
-    };
+    const [isFormVisible, setIsFormVisible] = useState(false);
+    const [isFail, setIsFail] = useState(false);
 
     const add = () => {
         axios.post ("http://localhost:5000/api/poderes/save", poder,{
@@ -32,7 +23,6 @@ export default function RegistroPoder (props){
             setPoder('')
             props.setRefresh(true)
           };
-          setErrorbd(false);
         },
         (error) => {
           console.log(error);
@@ -45,54 +35,57 @@ export default function RegistroPoder (props){
     return(
         <Box mt={4}>
             <Typography mb={2}>
-                Si no encuentra los poderes del estudiante, favor de registrarlos abajo
+                Si no encuentra los poderes del estudiante, favor de registrarlos
             </Typography>
 
+            <Button
+              variant="contained"
+              sx={{backgroundColor: "#03506F", color:"white"}}
+              onClick={() => setIsFormVisible(true)}
+            >
+              Agregar nuevo poder
+            </Button>
 
-            <Accordion sx={{boxShadow:'none'}} expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-                <AccordionSummary
-                expandIcon={<ExpandMoreIcon sx={{color: "white"}}/>}
-                aria-controls="panel1bh-content"
-                id="panel1bh-header"
-                sx={{ width:200, backgroundColor: "#03506F", color:"white"}}
+            {isFormVisible &&
+              <Box>
+                <TextField
+                  type="text"
+                  id="nombrePoder"
+                  label="Ingresa el poder"
+                  onChange={(e) =>{
+                    setPoder(e.target.value)
+                    setIsFail(false)
+                  }}
+                  error={poder==='' && isFail}
+                  value={poder}
+                  sx={{mt:2, mb:2}}
+                />
+                <Grid
+                    sx={{mt:1}}
                 >
-                <Typography sx={{color: "white"}}>Registrar poder</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <Container className="App">
-                        <h4 className="PageHeading">Ingresa el poder</h4>
-                        <Form className="form">
-                        <   Col>
-                                <FormGroup row>
-                                    <Label for="name" sm={2}>Poder</Label>
-                                    <Col sm={2}>
-                                        <Input type="text" name="nombrePoder" onChange={(e) => setPoder(e.target.value)} value={poder} />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-                        <Col>
-                            <FormGroup row>
-                                <Col sm={5}>
-                                </Col>
-                                <Col sm={1}>
-                                    <Button color="primary" onClick={add}>Submit</Button>
-                                </Col>
-                                <Col sm={1}>
-                                    <Button color="secondary" /*onClick={this.cancel}*/>Cancel</Button>{' '}
-                                </Col>
-                                <Col sm={5}>
-                                </Col>
-                            </FormGroup>
-                        </Col>
-                    </Form>
-                </Container>
-                
-                </AccordionDetails>
-            </Accordion>
+                    <Button
+                      variant="contained"
+                      onClick={() => poder === '' ? setIsFail(true) : add()}
+                      size="small"
+                      sx={{mr:1, backgroundColor: "#03506F"}}
+                    >
+                      Agregar
+                    </Button>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      sx={{backgroundColor: "#C70039"}}
+                      onClick={() =>{
+                        setIsFormVisible(false)
+                        setPoder('')
+                        setIsFail(false)
+                      }}
+                    >
+                      Cancelar
+                    </Button>{' '}
+                </Grid>
+              </Box>
+            }
         </Box>
     );
 }
-
-/*
-      
-*/

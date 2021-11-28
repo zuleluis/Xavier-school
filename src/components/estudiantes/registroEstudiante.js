@@ -141,7 +141,8 @@ export default function RegistroEstudiante() {
                           <CloseIcon fontSize="inherit" />
                         </IconButton>
                       }
-                      severity="error">This is an error alert — check it out!</Alert>
+                      severity="error">ERROR: Selecciona al menos un poder
+                    </Alert>
                   </Collapse>
 
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>

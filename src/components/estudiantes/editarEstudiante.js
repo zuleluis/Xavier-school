@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'  
-import { useParams } from 'react-router';
+import React, { useState} from 'react'  
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
@@ -14,10 +13,6 @@ import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Switch from '@mui/material/Switch';
-import { Checkbox, Select } from '@mui/material';
-
-
-const steps = ['Datos personales', 'Registro de poderes'];
 
 const theme = createTheme();
 
@@ -52,7 +47,7 @@ export default function RegistroEstudiante() {
       poderes : data2.map(p => p.idPoder),
       activo : data.activoOInactivo
     });
-    setDefaultChecked(data.activoOInactivo == 1)
+    setDefaultChecked(data.activoOInactivo === 1)
     setPinta(true);
   }
   const buscaEstudinate = () => {
@@ -128,15 +123,13 @@ export default function RegistroEstudiante() {
       setIsFail(true)
       bool = true;
     }
-    if (datos.poderes.length == 0) {
+    if (datos.poderes.length === 0) {
       setFailPoderes(true);
     }
     if (bool)
       return;
     updateEstudiante();
   }
-
-  const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
   const handleBajaAlta = () => {
     if (datos.activoOInactivo !== 0) {
