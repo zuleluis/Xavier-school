@@ -27,13 +27,6 @@ export default function MenuEstudiantes() {
                 Description = "Algo de editar datos"
                 link = "/estudiantes/editar"
             />
-            <ExtendedCard
-                imgPath = "media/presentations.jpg"
-                imgText = "Status student"
-                Title = "Dar de baja estudiante"
-                Description = "Otro choro pero pa funar a un estudiante del sistema"
-                link = "naranjas"
-            />
         </div>
     );
     

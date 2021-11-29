@@ -13,16 +13,18 @@ import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Switch from '@mui/material/Switch';
+import { Grid } from '@mui/material';
 
 const theme = createTheme();
 
 export default function RegistroEstudiante() {
   const [idEstu, setIdEstu] = useState(0)
-  const [pinta, setPinta] = useState(true);
+  const [pinta, setPinta] = useState(false);
   const [isFail, setIsFail] = useState(false);
-  const [disabledSwitch, setDisabledSwitch] = useState(true);
+  const [disabledSwitch, setDisabledSwitch] = useState(true)
   const [defaultChecked, setDefaultChecked] = useState(false)
   const [failPoderes, setFailPoderes] = useState(false)
+  const [showForm, setShowForm] = useState(true)
   
   const [datos, setDatos] = useState({
     nombreEst : "",
@@ -49,8 +51,9 @@ export default function RegistroEstudiante() {
     });
     setDefaultChecked(data.activoOInactivo === 1)
     setPinta(true);
+    setShowForm(true)
   }
-  const buscaEstudinate = () => {
+  const buscaEstudiante = () => {
     setPinta(false);
     axios.get(`http://localhost:5000/api/estudiantes/${idEstu}&0`, {
       headers : {
@@ -58,14 +61,12 @@ export default function RegistroEstudiante() {
       }
     }).then((response) => {
       if (response.status === 200) {
-        //setEstudiante(response.data);
         axios.get(`http://localhost:5000/api/estudiantes/poderes/${idEstu}`, {
           headers : {
             'Content-type': 'application/json'
           }
         }).then((response1) => {
           if (response1.status === 200) {
-            //setPoderesEst(response1.data)
             setValues(response.data, response1.data);
             setDisabledSwitch(false);
           }
@@ -76,16 +77,92 @@ export default function RegistroEstudiante() {
 
     }, (error) => {
       console.log(error);
+      setShowForm(false)
     });
   };
 
-
   function data() {
     if (pinta) {
-      return <Container><DatosPersonales setDatos={setDatos} datos={datos} setIsFail={setIsFail} isFail={isFail}/>
-                <DatosPoderes setDatos={setDatos} datos={datos}/></Container>;
+      return(
+        <Container align="justify">
+          <Grid sx={{mt:4, mb: 4}}>
+            <Typography>
+              Estatus del estudiante
+            </Typography>
+
+            <Typography> Inactivo
+              <Switch  checked={defaultChecked}/> 
+              Activo
+            </Typography>
+
+            <Button
+              variant="contained"
+              onClick={handleBajaAlta}
+              size="small "
+              sx={{backgroundColor: "#03506F", color:"white"}}
+            >
+              {defaultChecked ? "Dar de baja" : "Reactivar"}
+            </Button>
+          </Grid>
+
+          <Grid sx={{mb:3}}>
+            <DatosPersonales
+              setDatos={setDatos}
+              datos={datos}
+              setIsFail={setIsFail}
+              isFail={isFail}
+            />
+          </Grid>
+
+          <Grid>
+            <DatosPoderes
+              setDatos={setDatos}
+              datos={datos}
+            />
+          </Grid>
+
+          <Grid sx={{mt:2, mb:2}}>
+            <Collapse in={failPoderes}>
+              <Alert
+                action={
+                  <IconButton aria-label="close" color="inherit" size="small"
+                    onClick={() => {
+                      setFailPoderes(false);
+                    }}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+                severity="error">ERROR: Selecciona al menos un poder</Alert>
+            </Collapse>
+          </Grid>
+
+          <Grid container justifyContent="flex-end">
+            <Button
+              variant="contained"
+              onClick={verificaAndRegistra()}
+              sx={{backgroundColor: "#03506F", color:"white"}}
+            >
+              Guardar cambios
+            </Button>
+          </Grid>
+        </Container>
+      );
     }
-    return <Container></Container>
+    else{
+      if(showForm === false){
+        return(
+          <Container sx={{mt:3}}>
+            <Typography variant="h6">
+              El estudiante no existe.
+            </Typography>
+          </Container>
+        );
+      }
+      return(
+        <Container/>
+      );
+    }
   }
 
 
@@ -128,7 +205,8 @@ export default function RegistroEstudiante() {
     }
     if (bool)
       return;
-    updateEstudiante();
+
+    updateEstudiante()
   }
 
   const handleBajaAlta = () => {
@@ -142,46 +220,26 @@ export default function RegistroEstudiante() {
   }
   return (
     <ThemeProvider theme={theme}>
-      <Container>
+      <Container align="center">
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-          <Typography component="h1" variant="h4" align="center">
+          <Typography component="h1" variant="h4" align="center" sx={{mb: 3}}>
             Actualizar estudiante
           </Typography>
           
           <TextField
-          required
-          id="outlined-required"
-
-          onChange={handleInputId}
+            id="outlined-required"
+            label="ID del estudiante"
+            onChange={handleInputId}
           />
 
-          <Button variant="contained" onClick={buscaEstudinate} sx={{backgroundColor: "#03506F", color:"white"}}>
-            Buscar Estudiante
-          </Button>
+          <Grid sx={{mt:2}}>
+            <Button variant="contained" onClick={buscaEstudiante} sx={{backgroundColor: "#03506F", color:"white"}}>
+              Buscar Estudiante
+            </Button>
+          </Grid>
           
-          <Typography> Inactivo <Switch  checked={defaultChecked}/> Activo</Typography>
-          <Button variant="contained" onClick={handleBajaAlta} sx={{backgroundColor: "#03506F", color:"white"}} >{defaultChecked ? "Desactivar" : "Activar"}</Button>
-
           {data()}
-          <Collapse in={failPoderes}>
-            <Alert
-              action={
-                <IconButton aria-label="close" color="inherit" size="small"
-                  onClick={() => {
-                    setFailPoderes(false);
-                  }}
-                >
-                  <CloseIcon fontSize="inherit" />
-                </IconButton>
-              }
-              severity="error">This is an error alert — check it out!</Alert>
-          </Collapse>
-
-          <Button variant="contained" onClick={verificaAndRegistra} sx={{backgroundColor: "#03506F", color:"white"}}>
-            Registrar
-          </Button>
         </Paper>
-        <Typography>{datos.nombreEst} | {datos.apellidoEst} | {datos.fechaEst} | {datos.nssEst} | {datos.poderes} | {datos.nivelEst} ID: {idEstu}</Typography>
       </Container>
     </ThemeProvider>
   );
