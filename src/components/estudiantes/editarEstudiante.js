@@ -14,17 +14,19 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Switch from '@mui/material/Switch';
 import { Grid } from '@mui/material';
+import Snackbar from '@mui/material/Snackbar';
 
 const theme = createTheme();
 
 export default function RegistroEstudiante() {
   const [idEstu, setIdEstu] = useState(0)
-  const [pinta, setPinta] = useState(false);
-  const [isFail, setIsFail] = useState(false);
+  const [pinta, setPinta] = useState(false)
+  const [isFail, setIsFail] = useState(false)
   const [disabledSwitch, setDisabledSwitch] = useState(true)
   const [defaultChecked, setDefaultChecked] = useState(false)
   const [failPoderes, setFailPoderes] = useState(false)
   const [showForm, setShowForm] = useState(true)
+  const [open, setOpen] = useState(false)
   
   const [datos, setDatos] = useState({
     nombreEst : "",
@@ -44,10 +46,9 @@ export default function RegistroEstudiante() {
       nombreEst : data.nombreEstudiante,
       apellidoEst : data.apellidoEstudiante,
       fechaEst : fecha,
-      nivelEst : data.fkNivelpoderEst,
+      nivelEst : data.fkNivelpoderEst, 
       nssEst : data.nssEst,
       poderes : data2.map(p => p.idPoder),
-      //activo : data.activoOInactivo
     });
     datos.activo = data.activoOInactivo
     setDefaultChecked(data.activoOInactivo === 1)
@@ -147,6 +148,12 @@ export default function RegistroEstudiante() {
               Guardar cambios
             </Button>
           </Grid>
+
+          <Snackbar size="medium" open={open} autoHideDuration={4000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+              Estudiante actualizado
+            </Alert>
+          </Snackbar>
         </Container>
       );
     }
@@ -169,6 +176,12 @@ export default function RegistroEstudiante() {
 
   const handleInputId = (event) => setIdEstu(event.target.value)
 
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
 
   const updateEstudiante = () => {
     console.log(datos.activo)
@@ -208,6 +221,7 @@ export default function RegistroEstudiante() {
     if (bool)
       return;
 
+    setOpen(true)
     updateEstudiante()
   }
 
