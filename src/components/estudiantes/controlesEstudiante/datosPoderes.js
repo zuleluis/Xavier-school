@@ -90,8 +90,7 @@ const EnhancedTableToolbar = (props) => {
           bgcolor: (theme) =>
             alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
         }),
-      }}
-      sx={{backgroundColor: "#03506F", color:"white"}}
+        backgroundColor: "#03506F", color:"white"}}
     >
       {numSelected > 0 ? (
         <Typography

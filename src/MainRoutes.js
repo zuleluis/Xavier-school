@@ -6,10 +6,14 @@ import Home from './components/Home';
 import RegistroEstudiante from './components/estudiantes/registroEstudiante'
 import DetallesEstudiante from './components/estudiantes/detallesEstudiante';
 import EditarEstudiante from './components/estudiantes/editarEstudiante';
+import Login from './components/login/login';
 
 export default function MainRoutes() {
     return(
         <Switch>
+            <Route exact path="/login">
+                <Login/>
+            </Route>
             <Route exact path="/estudiantes">
                 <MenuEstudiantes/>
             </Route>
