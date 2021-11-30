@@ -39,16 +39,17 @@ export default function RegistroEstudiante() {
 
   const setValues = (data, data2) => {
     var fecha = data.fechaNacimiento.substring(0, data.fechaNacimiento.indexOf("T"));
-    console.log(data.nssEstudiante)
     setDatos({
+      ...datos,
       nombreEst : data.nombreEstudiante,
       apellidoEst : data.apellidoEstudiante,
       fechaEst : fecha,
       nivelEst : data.fkNivelpoderEst,
       nssEst : data.nssEst,
       poderes : data2.map(p => p.idPoder),
-      activo : data.activoOInactivo
+      //activo : data.activoOInactivo
     });
+    datos.activo = data.activoOInactivo
     setDefaultChecked(data.activoOInactivo === 1)
     setPinta(true);
     setShowForm(true)
@@ -140,7 +141,7 @@ export default function RegistroEstudiante() {
           <Grid container justifyContent="flex-end">
             <Button
               variant="contained"
-              onClick={verificaAndRegistra()}
+              onClick={verificaAndRegistra}
               sx={{backgroundColor: "#03506F", color:"white"}}
             >
               Guardar cambios
@@ -170,13 +171,14 @@ export default function RegistroEstudiante() {
 
 
   const updateEstudiante = () => {
+    console.log(datos.activo)
     axios.post (`http://localhost:5000/api/estudiante/update/${idEstu}`, {
       estudiante:  {
         nombreEstudiante: datos.nombreEst,
         apellidoEstudiante: datos.apellidoEst,
         fechaNacimiento: datos.fechaEst,
         nssEstudiante: datos.nssEst,
-        activoOInactivo: datos.activoOInactivo,
+        activoOInactivo: datos.activo,
         fkNivelpoderEst: datos.nivelEst
       },
       powers: datos.poderes
@@ -210,12 +212,12 @@ export default function RegistroEstudiante() {
   }
 
   const handleBajaAlta = () => {
-    if (datos.activoOInactivo !== 0) {
-      datos.activoOInactivo = 0
+    if (datos.activo !== 0) {
+      datos.activo = 0
     } else {
-      datos.activoOInactivo = 1
+      datos.activo = 1
     }
-    setDefaultChecked(datos.activoOInactivo === 1)
+    setDefaultChecked(datos.activo === 1)
     console.log(defaultChecked)
   }
   return (
