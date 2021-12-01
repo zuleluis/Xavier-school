@@ -6,23 +6,11 @@ import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
-	
-    root: {
-      flexGrow: 1,
-    },
-    menuButton: {
+  logo: {
+      height: 50,
       marginRight: theme.spacing(2),
-    },
-    title: {
-      flexGrow: 1,
-          color: "#540D18",
-      textDecoration: "none",
-    },
-      logo: {
-          height: 50,
-          marginRight: theme.spacing(2),
-      }
-  }));
+  }
+}));
 
 export default function NavBar(props){
     const classes = useStyles();

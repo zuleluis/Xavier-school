@@ -127,9 +127,6 @@ export default function DatosPoderes(props) {
   const [poderes,setPoderes] = useState([]); 
   const [refresh, setRefresh] = useState(true)
   const [errorbd, setErrorbd] = useState(false);
-
-  const [isFetched, setIsFetched] = useState(false);
-  const [error, setError] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
   const location = useLocation();
 
@@ -195,19 +192,6 @@ export default function DatosPoderes(props) {
 
   useEffect(() => {
     if (refresh){
-      /*fetch("http://localhost:5000/api/poderes/all")
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setPoderes(data);
-        setErrorbd(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setErrorbd(true);
-      });
-      setRefresh(false);*/
       axios.get("http://localhost:5000/api/poderes/all", {
         headers : {
           'Content-type': 'application/json',
@@ -218,8 +202,6 @@ export default function DatosPoderes(props) {
           if (response.status === 200) {
             setPoderes(response.data);
             setErrorbd(false);
-            setIsFetched(true);
-            setError(null);
           }
         },
         (error) => {

@@ -18,9 +18,6 @@ export default function DatosPersonales(props) {
   }
   const [niveles, setNiveles] = useState([]);
   const [errorbd, setErrorbd] = useState(false);
-
-  const [isFetched, setIsFetched] = useState(false);
-  const [error, setError] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
   const location = useLocation();
 
@@ -35,8 +32,6 @@ export default function DatosPersonales(props) {
         if (response.status === 200) {
           setNiveles(response.data);
           setErrorbd(false);
-          setIsFetched(true);
-          setError(null);
         }
       },
       (error) => {

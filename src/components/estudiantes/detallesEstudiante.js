@@ -27,31 +27,11 @@ export default function DetallesEstudiante() {
     const [leccionespub, setLeccionesPub] = useState([{user: null}])
     const [presentaciones, setPresentaciones] = useState([])
     const [errorbd, setErrorbd] = useState(false);
-
-    const [isFetched, setIsFetched] = useState(false);
-    const [error, setError] = useState(null);
     const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
     const location = useLocation();
 
-    /*
     useEffect(() => {
-        fetch(`http://localhost:5000/api/estudiantes/${idEstudiante}&1`)
-        .then((res) => {
-          return res.json();
-        })
-        .then((data) => {
-          setEstudiante(data)
-          setErrorbd(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          setErrorbd(true);
-        });
-    },[]);
-    */
-
-    useEffect(() => {
-      axios.get("http://localhost:5000/api/estudiantes/${idEstudiante}&1", {
+      axios.get(`http://localhost:5000/api/estudiantes/${idEstudiante}&1`, {
         headers : {
           'Content-type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -61,8 +41,6 @@ export default function DetallesEstudiante() {
           if (response.status === 200) {
             setEstudiante(response.data);
             setErrorbd(false);
-            setIsFetched(true);
-            setError(null);
           }
         },
         (error) => {
@@ -78,65 +56,99 @@ export default function DetallesEstudiante() {
     },[])
 
     useEffect(() => {
-      fetch(`http://localhost:5000/api/estudiantes/poderes/${idEstudiante}`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setPoderes(data)
-        setErrorbd(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setErrorbd(true);
-      });
-    },[]);
-
-    useEffect(() => {
-      fetch(`http://localhost:5000/api/estudiantes/lecGrupo/${idEstudiante}`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setLeccionesPub(data)
-        setErrorbd(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setErrorbd(true);
-      });
-    },[]);
-
-    useEffect(() => {
-      fetch(`http://localhost:5000/api/estudiantes/lecPrivadas/${idEstudiante}`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setLeccionesPriv(data)
-        setErrorbd(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setErrorbd(true);
-      });
-    },[]);
-
-    useEffect(() => {
-      fetch(`http://localhost:5000/api/estudiantes/presentaciones/${idEstudiante}`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setPresentaciones(data)
-        setErrorbd(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setErrorbd(true);
-      });
-    },[]);
+      axios.get(`http://localhost:5000/api/estudiantes/poderes/${idEstudiante}`, {
+        headers : {
+          'Content-type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      }).then (
+        (response) => {
+          if (response.status === 200) {
+            setPoderes(response.data);
+          }
+        },
+        (error) => {
+          //console.log(error.response.status)
+          if (error.response.status === 401) {
+            localStorage.removeItem("ACCESS_TOKEN");
+            setToken('');
+          }
+          else setErrorbd(true);
+        }
+      );
+    },[])
     
+    useEffect(() => {
+      axios.get(`http://localhost:5000/api/estudiantes/lecGrupo/${idEstudiante}`, {
+        headers : {
+          'Content-type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      }).then (
+        (response) => {
+          if (response.status === 200) {
+            setLeccionesPub(response.data);
+          }
+        },
+        (error) => {
+          //console.log(error.response.status)
+          if (error.response.status === 401) {
+            localStorage.removeItem("ACCESS_TOKEN");
+            setToken('');
+            setErrorbd(false);
+          }
+          else setErrorbd(true);
+        }
+      );
+    },[])
+
+    useEffect(() => {
+      axios.get(`http://localhost:5000/api/estudiantes/lecPrivadas/${idEstudiante}`, {
+        headers : {
+          'Content-type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      }).then (
+        (response) => {
+          if (response.status === 200) {
+            setLeccionesPriv(response.data);
+          }
+        },
+        (error) => {
+          //console.log(error.response.status)
+          if (error.response.status === 401) {
+            localStorage.removeItem("ACCESS_TOKEN");
+            setToken('');
+            setErrorbd(false);
+          }
+          else setErrorbd(true);
+        }
+      );
+    },[])
+    
+    useEffect(() => {
+      axios.get(`http://localhost:5000/api/estudiantes/presentaciones/${idEstudiante}`, {
+        headers : {
+          'Content-type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      }).then (
+        (response) => {
+          if (response.status === 200) {
+            setPresentaciones(response.data);
+          }
+        },
+        (error) => {
+          //console.log(error.response.status)
+          if (error.response.status === 401) {
+            localStorage.removeItem("ACCESS_TOKEN");
+            setToken('');
+            setErrorbd(false);
+          }
+          else setErrorbd(true);
+        }
+      );
+    },[])
 
     const dateFormatter = (date) => {
       if(date){

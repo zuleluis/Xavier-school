@@ -11,9 +11,6 @@ export default function RegistroPoder (props){
     const [errorbd, setErrorbd] = useState(false);
     const [isFormVisible, setIsFormVisible] = useState(false);
     const [isFail, setIsFail] = useState(false);
-
-    const [isFetched, setIsFetched] = useState(false);
-    const [error, setError] = useState(null);
     const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
     const location = useLocation();
 
@@ -29,8 +26,6 @@ export default function RegistroPoder (props){
             setPoder('')
             props.setRefresh(true)
             setErrorbd(false);
-            setIsFetched(true);
-            setError(null);
           };
         },
         (error) => {

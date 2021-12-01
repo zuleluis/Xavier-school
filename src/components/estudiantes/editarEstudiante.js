@@ -29,9 +29,6 @@ export default function RegistroEstudiante() {
   const [showForm, setShowForm] = useState(true)
   const [open, setOpen] = useState(false)
   const [errorbd, setErrorbd] = useState(false);
-
-  const [isFetched, setIsFetched] = useState(false);
-  const [error, setError] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
   const location = useLocation();
   
@@ -74,6 +71,7 @@ export default function RegistroEstudiante() {
         axios.get(`http://localhost:5000/api/estudiantes/poderes/${idEstu}`, {
           headers : {
             'Content-type': 'application/json',
+            'Authorization': `Bearer ${token}`
           }
         }).then((response1) => {
           if (response1.status === 200) {
@@ -84,8 +82,6 @@ export default function RegistroEstudiante() {
           console.log(error1)
         })
         setErrorbd(false);
-        setIsFetched(true);
-        setError(null);
       }
 
     }, (error) => {

@@ -37,8 +37,6 @@ export default function RegistroEstudiante() {
     poderes : []
   });
 
-  const [isFetched, setIsFetched] = useState(false);
-  const [error, setError] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
   const location = useLocation();
 
@@ -75,8 +73,6 @@ export default function RegistroEstudiante() {
       if (response.status === 200) {
         setActiveStep(activeStep + 1)
         setErrorbd(false);
-        setIsFetched(true);
-        setError(null);
       }
     }, (error) => {
       //console.log(error);

@@ -7,12 +7,16 @@ import RegistroEstudiante from './components/estudiantes/registroEstudiante'
 import DetallesEstudiante from './components/estudiantes/detallesEstudiante';
 import EditarEstudiante from './components/estudiantes/editarEstudiante';
 import Login from './components/login/login';
+import RegistroUsuario from './components/login/registroUsuario';
 
 export default function MainRoutes() {
     return(
         <Switch>
             <Route exact path="/login">
                 <Login/>
+            </Route>
+            <Route exact path="/signup">
+                <RegistroUsuario/>
             </Route>
             <Route exact path="/estudiantes">
                 <MenuEstudiantes/>

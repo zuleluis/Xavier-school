@@ -31,11 +31,7 @@ export default function ListaEstudiantes (props) {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('idEstudiante');
   const [errorbd, setErrorbd] = useState(false);
-
-  
-  const [isFetched, setIsFetched] = useState(false);
-  const [error, setError] = useState(null);
-  const [token, setToken] = useState(/*localStorage.getItem("ACCESS_TOKEN")*/);
+  const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
   const location = useLocation();
  
   const handleChangePage = (event, newPage) => {
@@ -64,8 +60,6 @@ export default function ListaEstudiantes (props) {
         if (response.status === 200) {
           setEstudiantes(response.data);
           setErrorbd(false);
-          setIsFetched(true);
-          setError(null);
         }
       },
       (error) => {
