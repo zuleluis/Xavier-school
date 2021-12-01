@@ -97,11 +97,12 @@ export default function ListaEstudiantes (props) {
   if(errorbd) return <Redirect to='/error'/>;
   if(!token){
     return(
+      //console.log(location.pathname),
       <Redirect to={
         {
           pathname:'/login',
           state:{
-            from: props.location
+            from: location
           }
         }
       }/>

@@ -38,7 +38,7 @@ const Login = (props) => {
 					localStorage.setItem("ACCESS_TOKEN", json.token);
 					history.push(values.prev)
 					//console.log(json.token)
-					//console.log("Ubicacion: " + values.prev)
+					console.log("Ubicacion: " + values.prev)
 				}
 			},
 			(error) => {
