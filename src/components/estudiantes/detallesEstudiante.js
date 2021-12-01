@@ -15,8 +15,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom';
 import LinkButton from '../linkButton';
+import axios from 'axios';
 
 export default function DetallesEstudiante() {
     const {idEstudiante} = useParams();
@@ -27,7 +28,12 @@ export default function DetallesEstudiante() {
     const [presentaciones, setPresentaciones] = useState([])
     const [errorbd, setErrorbd] = useState(false);
 
+    const [isFetched, setIsFetched] = useState(false);
+    const [error, setError] = useState(null);
+    const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
+    const location = useLocation();
 
+    /*
     useEffect(() => {
         fetch(`http://localhost:5000/api/estudiantes/${idEstudiante}&1`)
         .then((res) => {
@@ -42,6 +48,34 @@ export default function DetallesEstudiante() {
           setErrorbd(true);
         });
     },[]);
+    */
+
+    useEffect(() => {
+      axios.get("http://localhost:5000/api/estudiantes/${idEstudiante}&1", {
+        headers : {
+          'Content-type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      }).then (
+        (response) => {
+          if (response.status === 200) {
+            setEstudiante(response.data);
+            setErrorbd(false);
+            setIsFetched(true);
+            setError(null);
+          }
+        },
+        (error) => {
+          //console.log(error.response.status)
+          if (error.response.status === 401) {
+            localStorage.removeItem("ACCESS_TOKEN");
+            setToken('');
+            setErrorbd(false);
+          }
+          else setErrorbd(true);
+        }
+      );
+    },[])
 
     useEffect(() => {
       fetch(`http://localhost:5000/api/estudiantes/poderes/${idEstudiante}`)
@@ -102,6 +136,7 @@ export default function DetallesEstudiante() {
         setErrorbd(true);
       });
     },[]);
+    
 
     const dateFormatter = (date) => {
       if(date){
@@ -110,6 +145,18 @@ export default function DetallesEstudiante() {
     }
 
     if(errorbd) return <Redirect to='/error'/>;
+    if(!token){
+      return(
+        <Redirect to={
+          {
+            pathname:'/login',
+            state:{
+              from: location
+            }
+          }
+        }/>
+      )
+    }
 
     return (
         <div>

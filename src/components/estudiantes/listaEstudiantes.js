@@ -10,9 +10,8 @@ import SortTable from '../SortTable';
 import EnhancedTableHead from '../HeadSortTable';
 import { visuallyHidden } from '@mui/utils';
 import Button from '@mui/material/Button'
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { Typography } from '@material-ui/core';
 
 const headCells = [
   { id: 'nombreEstudiante', numeric: false, label: 'Nombre' },
@@ -36,8 +35,8 @@ export default function ListaEstudiantes (props) {
   
   const [isFetched, setIsFetched] = useState(false);
   const [error, setError] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
-  
+  const [token, setToken] = useState(/*localStorage.getItem("ACCESS_TOKEN")*/);
+  const location = useLocation();
  
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -70,8 +69,13 @@ export default function ListaEstudiantes (props) {
         }
       },
       (error) => {
-        console.log("Todo mal");
-        setErrorbd(true);
+        //console.log(error.response.status)
+        if (error.response.status === 401) {
+          localStorage.removeItem("ACCESS_TOKEN");
+          setToken('');
+          setErrorbd(false);
+        }
+        else setErrorbd(true);
       }
     );
   },[])
@@ -90,7 +94,19 @@ export default function ListaEstudiantes (props) {
   }
 
     
-  //if(errorbd) return <Redirect to='/error'/>;
+  if(errorbd) return <Redirect to='/error'/>;
+  if(!token){
+    return(
+      <Redirect to={
+        {
+          pathname:'/login',
+          state:{
+            from: props.location
+          }
+        }
+      }/>
+    )
+  }
 
   return (
     <Paper>

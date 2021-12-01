@@ -16,7 +16,8 @@ import Checkbox from '@mui/material/Checkbox';
 import { visuallyHidden } from '@mui/utils';
 import SortTable from '../../SortTable';
 import RegistroPoder from '../../poderes/registroPoder';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 const headCells = [
   { id: 'nombrePoder', numeric: false, label: 'Poder' },
@@ -127,6 +128,11 @@ export default function DatosPoderes(props) {
   const [refresh, setRefresh] = useState(true)
   const [errorbd, setErrorbd] = useState(false);
 
+  const [isFetched, setIsFetched] = useState(false);
+  const [error, setError] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
+  const location = useLocation();
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -189,7 +195,7 @@ export default function DatosPoderes(props) {
 
   useEffect(() => {
     if (refresh){
-      fetch("http://localhost:5000/api/poderes/all")
+      /*fetch("http://localhost:5000/api/poderes/all")
       .then((res) => {
         return res.json();
       })
@@ -201,7 +207,30 @@ export default function DatosPoderes(props) {
         console.log(err);
         setErrorbd(true);
       });
-      setRefresh(false);
+      setRefresh(false);*/
+      axios.get("http://localhost:5000/api/poderes/all", {
+        headers : {
+          'Content-type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      }).then (
+        (response) => {
+          if (response.status === 200) {
+            setPoderes(response.data);
+            setErrorbd(false);
+            setIsFetched(true);
+            setError(null);
+          }
+        },
+        (error) => {
+          if (error.response.status === 401) {
+            localStorage.removeItem("ACCESS_TOKEN");
+            setToken('');
+            setErrorbd(false);
+          }
+          else setErrorbd(true);
+        }
+      );
     }
   });
 
@@ -223,6 +252,18 @@ export default function DatosPoderes(props) {
   };
 
   if(errorbd) return <Redirect to='/error'/>;
+  if(!token){
+    return(
+      <Redirect to={
+        {
+          pathname:'/login',
+          state:{
+            from: location
+          }
+        }
+      }/>
+    )
+  }
 
 
   return (

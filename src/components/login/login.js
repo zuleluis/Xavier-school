@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from 'react';
-import { Location } from 'history';
+import { useLocation, useHistory } from "react-router";
 
 import { 
 	Form,
@@ -12,17 +12,20 @@ import {
 } from "reactstrap";
 
 const Login = (props) => {
-	
-	const [correo, setCorreo] = useState('')
-	const [password, setPassword] = useState('')
-	const [error, setError] = useState(false)
-	//const [prev, setPrev] = useState(props.location.state.from.pathname)
+	const location = useLocation();
+	const history = useHistory();
+	const [values, setValues] = useState({
+		username: '',
+		password: '',
+		error: false,
+		prev: location.state.from.pathname
+	  });
 
 	const doLogin = () => {
 		axios.post ('http://localhost:5000/api/usuarios/autenticar',
 			{
-				"correo": correo,
-				"password": password,
+				"correo": values.username,
+				"password": values.password,
 			},
 		{
 			headers: {
@@ -33,51 +36,40 @@ const Login = (props) => {
 				if (response.status === 200) {
 					const json = response.data;
 					localStorage.setItem("ACCESS_TOKEN", json.token);
-					//props.history.push (prev);
+					history.push(values.prev)
 					//console.log(json.token)
+					//console.log("Ubicacion: " + values.prev)
 				}
 			},
 			(error) => {
 				if (error.response.status === 400) {
-					/*guardarEstado (prevState =>
-						{
-							return (
-								{
-									...prevState,
-									error: true
-								}	
-							)
-						}
-					);*/
+					setValues ({
+						...values,
+						error: true
+					});
 				}
 				console.log("Exception " + error);
 			}
 		);
 	}
 
-	/*
-	const handleChange = (e) => {
-		const name = e.target.name;
-		const val = e.target.value;
-
-		guardarEstado (prevState =>
-			{
-				return (
-					{
-						...prevState,
-						[name]: val
-					}
-				);
-			}
-		);
-	}*/
+	const handleChange = e => {
+		const {name, value} = e.target;
+		setValues({
+		  ...values,
+		  [name] : value
+		})
+	};	
 
 	return (
 		<div>
 				<Alert
-					isOpen={error}
+					isOpen={values.error}
 					color="danger"
-					//toggle={() => {guardarEstado ( prevState => { return ( {...prevState, error: false} )})}}
+					toggle={() => {setValues ({
+						...values,
+						error: false
+					})}}
 				>
 					User or Password Incorrect!
 				</Alert>
@@ -85,11 +77,11 @@ const Login = (props) => {
 					<Form>
 						<FormGroup>
 							<Label>Usuario</Label>
-							<Input name="correo" type="text" onChange={(e) => setCorreo(e.target.value)} value={correo} />
+							<Input name="username" type="text" onChange={handleChange} value={values.username} />
 						</FormGroup>
 						<FormGroup>
 							<Label>Contraseña</Label>
-							<Input type="password" name="Password" onChange={e => setPassword(e.target.value)} value={password} />
+							<Input type="password" name="password" onChange={handleChange} value={values.password} />
 						</FormGroup>
 						<Button block type="button" onClick={doLogin}>
 							login

@@ -15,9 +15,9 @@ import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { Redirect } from 'react-router-dom';
 import LinkButton from '../linkButton';
 import { Grid } from '@mui/material';
+import { Redirect, useLocation } from 'react-router-dom';
 
 const steps = ['Datos personales', 'Registro de poderes'];
 
@@ -36,6 +36,11 @@ export default function RegistroEstudiante() {
     nivelEst : "",
     poderes : []
   });
+
+  const [isFetched, setIsFetched] = useState(false);
+  const [error, setError] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
+  const location = useLocation();
 
 
   function getStepContent(step) {
@@ -63,16 +68,24 @@ export default function RegistroEstudiante() {
     },
     {
       headers : {
-        'Content-type': 'application/json'
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
       }
     }).then ((response) => {
       if (response.status === 200) {
         setActiveStep(activeStep + 1)
         setErrorbd(false);
+        setIsFetched(true);
+        setError(null);
       }
     }, (error) => {
-      console.log(error);
-      setErrorbd(true);
+      //console.log(error);
+      if (error.response.status === 401) {
+        localStorage.removeItem("ACCESS_TOKEN");
+        setToken('');
+        setErrorbd(false);
+      }
+      else setErrorbd(true);
     })
   }
 
@@ -100,6 +113,18 @@ export default function RegistroEstudiante() {
   };
 
   if(errorbd) return <Redirect to='/error'/>;
+  if(!token){
+    return(
+      <Redirect to={
+        {
+          pathname:'/login',
+          state:{
+            from: location
+          }
+        }
+      }/>
+    )
+  }
 
   return (
     <ThemeProvider theme={theme}>

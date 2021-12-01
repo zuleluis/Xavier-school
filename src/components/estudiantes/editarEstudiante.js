@@ -15,6 +15,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Switch from '@mui/material/Switch';
 import { Grid } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
+import { Redirect, useLocation } from 'react-router-dom';
 
 const theme = createTheme();
 
@@ -27,6 +28,12 @@ export default function RegistroEstudiante() {
   const [failPoderes, setFailPoderes] = useState(false)
   const [showForm, setShowForm] = useState(true)
   const [open, setOpen] = useState(false)
+  const [errorbd, setErrorbd] = useState(false);
+
+  const [isFetched, setIsFetched] = useState(false);
+  const [error, setError] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
+  const location = useLocation();
   
   const [datos, setDatos] = useState({
     nombreEst : "",
@@ -59,13 +66,14 @@ export default function RegistroEstudiante() {
     setPinta(false);
     axios.get(`http://localhost:5000/api/estudiantes/${idEstu}&0`, {
       headers : {
-        'Content-type': 'application/json'
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
       }
     }).then((response) => {
       if (response.status === 200) {
         axios.get(`http://localhost:5000/api/estudiantes/poderes/${idEstu}`, {
           headers : {
-            'Content-type': 'application/json'
+            'Content-type': 'application/json',
           }
         }).then((response1) => {
           if (response1.status === 200) {
@@ -75,13 +83,35 @@ export default function RegistroEstudiante() {
         }, (error1) => {
           console.log(error1)
         })
+        setErrorbd(false);
+        setIsFetched(true);
+        setError(null);
       }
 
     }, (error) => {
-      console.log(error);
       setShowForm(false)
+      if (error.response.status === 401) {
+        localStorage.removeItem("ACCESS_TOKEN");
+        setToken('');
+        setErrorbd(false);
+      }
+      else setErrorbd(true);
     });
   };
+
+  if(errorbd) return <Redirect to='/error'/>;
+  if(!token){
+    return(
+      <Redirect to={
+        {
+          pathname:'/login',
+          state:{
+            from: location
+          }
+        }
+      }/>
+    )
+  }
 
   function data() {
     if (pinta) {

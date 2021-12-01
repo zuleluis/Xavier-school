@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useState, useEffect, Fragment} from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -7,6 +7,7 @@ import axios from 'axios';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import { FormControl } from '@mui/material';
+import { Redirect, useLocation } from 'react-router-dom';
 
 export default function DatosPersonales(props) {
   const handleInputText = (event) => {
@@ -15,29 +16,58 @@ export default function DatosPersonales(props) {
       [event.target.name] : event.target.value
     });
   }
+  const [niveles, setNiveles] = useState([]);
+  const [errorbd, setErrorbd] = useState(false);
 
-  const [niveles, setNiveles] = React.useState([]);
+  const [isFetched, setIsFetched] = useState(false);
+  const [error, setError] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
+  const location = useLocation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     axios.get("http://localhost:5000/api/niveles/all", {
       headers : {
-        'Content-type': 'application/json'
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
       }
     }).then (
       (response) => {
         if (response.status === 200) {
           setNiveles(response.data);
+          setErrorbd(false);
+          setIsFetched(true);
+          setError(null);
         }
       },
       (error) => {
         console.log("Ni pex, ya valiste pa...")
+        if (error.response.status === 401) {
+          localStorage.removeItem("ACCESS_TOKEN");
+          setToken('');
+          setErrorbd(false);
+        }
+        else setErrorbd(true);
       }
     );
   },[])
 
+  if(errorbd) return <Redirect to='/error'/>;
+  if(!token){
+    return(
+      <Redirect to={
+        {
+          pathname:'/login',
+          state:{
+            from: location
+          }
+        }
+      }/>
+    )
+  }
+
   return (
     props.datos.formSubmitted=true,
-    <React.Fragment>
+    <Fragment>
       <Typography variant="h6" gutterBottom>
         Datos Personales
       </Typography>
@@ -118,6 +148,6 @@ export default function DatosPersonales(props) {
           </Grid>
         </Grid>
       </Grid>
-    </React.Fragment>
+    </Fragment>
   );
 }
