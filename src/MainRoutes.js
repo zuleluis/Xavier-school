@@ -8,6 +8,8 @@ import DetallesEstudiante from './components/estudiantes/detallesEstudiante';
 import EditarEstudiante from './components/estudiantes/editarEstudiante';
 import Login from './components/login/login';
 import RegistroUsuario from './components/login/registroUsuario';
+import AboutUs from './components/AboutUs';
+import Logout from './components/login/logout';
 
 export default function MainRoutes() {
     return(
@@ -17,6 +19,12 @@ export default function MainRoutes() {
             </Route>
             <Route exact path="/signup">
                 <RegistroUsuario/>
+            </Route>
+            <Route exact path="/logout">
+                <Logout/>
+            </Route>
+            <Route exact path="/about/us">
+                <AboutUs/>
             </Route>
             <Route exact path="/estudiantes">
                 <MenuEstudiantes/>
