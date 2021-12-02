@@ -36,12 +36,14 @@ export default function DatosPersonales(props) {
       },
       (error) => {
         console.log("Ni pex, ya valiste pa...")
-        if (error.response.status === 401) {
-          localStorage.removeItem("ACCESS_TOKEN");
-          setToken('');
-          setErrorbd(false);
+        if(!error.response) setErrorbd(true);
+        else{
+          if (error.response.status === 401) {
+            localStorage.removeItem("ACCESS_TOKEN");
+            setToken('');
+            setErrorbd(false);
+          }
         }
-        else setErrorbd(true);
       }
     );
   },[])

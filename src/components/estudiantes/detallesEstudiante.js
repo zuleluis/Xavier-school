@@ -45,12 +45,14 @@ export default function DetallesEstudiante() {
         },
         (error) => {
           //console.log(error.response.status)
-          if (error.response.status === 401) {
-            localStorage.removeItem("ACCESS_TOKEN");
-            setToken('');
-            setErrorbd(false);
+          if(!error.response) setErrorbd(true);
+          else{
+            if (error.response.status === 401) {
+              localStorage.removeItem("ACCESS_TOKEN");
+              setToken('');
+              setErrorbd(false);
+            }
           }
-          else setErrorbd(true);
         }
       );
     },[])
@@ -69,11 +71,13 @@ export default function DetallesEstudiante() {
         },
         (error) => {
           //console.log(error.response.status)
-          if (error.response.status === 401) {
-            localStorage.removeItem("ACCESS_TOKEN");
-            setToken('');
+          if(!error.response) setErrorbd(true);
+          else{
+            if (error.response.status === 401) {
+              localStorage.removeItem("ACCESS_TOKEN");
+              setToken('');
+            }
           }
-          else setErrorbd(true);
         }
       );
     },[])
@@ -91,13 +95,15 @@ export default function DetallesEstudiante() {
           }
         },
         (error) => {
+          if(!error.response) setErrorbd(true);
+          else{
           //console.log(error.response.status)
-          if (error.response.status === 401) {
-            localStorage.removeItem("ACCESS_TOKEN");
-            setToken('');
-            setErrorbd(false);
+            if (error.response.status === 401) {
+              localStorage.removeItem("ACCESS_TOKEN");
+              setToken('');
+              setErrorbd(false);
+            }
           }
-          else setErrorbd(true);
         }
       );
     },[])
@@ -116,12 +122,14 @@ export default function DetallesEstudiante() {
         },
         (error) => {
           //console.log(error.response.status)
-          if (error.response.status === 401) {
-            localStorage.removeItem("ACCESS_TOKEN");
-            setToken('');
-            setErrorbd(false);
+          if(!error.response) setErrorbd(true);
+          else{
+            if (error.response.status === 401) {
+              localStorage.removeItem("ACCESS_TOKEN");
+              setToken('');
+              setErrorbd(false);
+            }
           }
-          else setErrorbd(true);
         }
       );
     },[])
@@ -140,12 +148,14 @@ export default function DetallesEstudiante() {
         },
         (error) => {
           //console.log(error.response.status)
-          if (error.response.status === 401) {
-            localStorage.removeItem("ACCESS_TOKEN");
-            setToken('');
-            setErrorbd(false);
+          if(!error.response) setErrorbd(true);
+          else{
+            if (error.response.status === 401) {
+              localStorage.removeItem("ACCESS_TOKEN");
+              setToken('');
+              setErrorbd(false);
+            }
           }
-          else setErrorbd(true);
         }
       );
     },[])

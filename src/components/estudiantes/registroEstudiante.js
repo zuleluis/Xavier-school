@@ -76,12 +76,14 @@ export default function RegistroEstudiante() {
       }
     }, (error) => {
       //console.log(error);
-      if (error.response.status === 401) {
-        localStorage.removeItem("ACCESS_TOKEN");
-        setToken('');
-        setErrorbd(false);
+      if(!error.response) setErrorbd(true);
+      else{
+        if (error.response.status === 401) {
+          localStorage.removeItem("ACCESS_TOKEN");
+          setToken('');
+          setErrorbd(false);
+        }
       }
-      else setErrorbd(true);
     })
   }
 
@@ -179,19 +181,19 @@ export default function RegistroEstudiante() {
                 {getStepContent(activeStep)}
 
                 <Collapse in={failPoderes}>
-                    <Alert
-                      action={
-                        <IconButton aria-label="close" color="inherit" size="small"
-                          onClick={() => {
-                            setFailPoderes(false);
-                          }}
-                        >
-                          <CloseIcon fontSize="inherit" />
-                        </IconButton>
-                      }
-                      severity="error">ERROR: Selecciona al menos un poder
-                    </Alert>
-                  </Collapse>
+                  <Alert
+                    action={
+                      <IconButton aria-label="close" color="inherit" size="small"
+                        onClick={() => {
+                          setFailPoderes(false);
+                        }}
+                      >
+                        <CloseIcon fontSize="inherit" />
+                      </IconButton>
+                    }
+                    severity="error">ERROR: Selecciona al menos un poder
+                  </Alert>
+                </Collapse>
 
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   {activeStep !== 0 && (

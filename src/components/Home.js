@@ -1,8 +1,27 @@
-import React from "react";
+import {React, useState} from "react";
 import Card from "./Card"
 import { Grid } from "@material-ui/core";
+import { Redirect, useLocation } from 'react-router-dom';
 
 export default function Home() {
+    const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
+    const location = useLocation();
+
+    if(!token){
+        return(
+          //console.log(location.pathname),
+          <Redirect to={
+            {
+              pathname:'/login',
+              state:{
+                from: location
+              }
+            }
+          }/>
+        )
+      }
+
+
     return(
         <div>
             <Grid container spacing={2}>

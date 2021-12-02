@@ -46,15 +46,14 @@ export default function RegistroEstudiante() {
   const setValues = (data, data2) => {
     var fecha = data.fechaNacimiento.substring(0, data.fechaNacimiento.indexOf("T"));
     setDatos({
-      ...datos,
       nombreEst : data.nombreEstudiante,
       apellidoEst : data.apellidoEstudiante,
       fechaEst : fecha,
       nivelEst : data.fkNivelpoderEst, 
       nssEst : data.nssEst,
       poderes : data2.map(p => p.idPoder),
+      activo : data.activoOInactivo
     });
-    datos.activo = data.activoOInactivo
     setDefaultChecked(data.activoOInactivo === 1)
     setPinta(true);
     setShowForm(true)
@@ -85,13 +84,17 @@ export default function RegistroEstudiante() {
       }
 
     }, (error) => {
-      setShowForm(false)
-      if (error.response.status === 401) {
-        localStorage.removeItem("ACCESS_TOKEN");
-        setToken('');
-        setErrorbd(false);
+      if(!error.response) setErrorbd(true);
+      else{
+        if (error.response.status === 401) {
+          localStorage.removeItem("ACCESS_TOKEN");
+          setToken('');
+          setErrorbd(false);
+        }
+        if(error.response.status === 400){
+          setShowForm(false)
+        }
       }
-      else setErrorbd(true);
     });
   };
 
@@ -224,7 +227,8 @@ export default function RegistroEstudiante() {
     },
     {
       headers : {
-        'Content-type': 'application/json'
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
       }
     }).then ((response) => {
       if (response.status === 200) {
@@ -253,11 +257,17 @@ export default function RegistroEstudiante() {
 
   const handleBajaAlta = () => {
     if (datos.activo !== 0) {
-      datos.activo = 0
+      setDatos({
+        ...datos,
+        activo: 0
+      })
     } else {
-      datos.activo = 1
+      setDatos({
+        ...datos,
+        activo: 1
+      })
     }
-    setDefaultChecked(datos.activo === 1)
+    setDefaultChecked(datos.activo === 0)
     console.log(defaultChecked)
   }
   return (

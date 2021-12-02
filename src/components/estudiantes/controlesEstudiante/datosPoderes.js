@@ -205,14 +205,17 @@ export default function DatosPoderes(props) {
           }
         },
         (error) => {
-          if (error.response.status === 401) {
-            localStorage.removeItem("ACCESS_TOKEN");
-            setToken('');
-            setErrorbd(false);
+          if(!error.response) setErrorbd(true);
+          else{
+            if (error.response.status === 401) {
+              localStorage.removeItem("ACCESS_TOKEN");
+              setToken('');
+              setErrorbd(false);
+            }
           }
-          else setErrorbd(true);
         }
       );
+      setRefresh(false);
     }
   });
 
