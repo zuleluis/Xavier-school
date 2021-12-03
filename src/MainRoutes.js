@@ -10,6 +10,10 @@ import Login from './components/login/login';
 import RegistroUsuario from './components/login/registroUsuario';
 import AboutUs from './components/AboutUs';
 import Logout from './components/login/logout';
+import ListaProfesores from './components/profesores/listaProfesores';
+import DetallesProfesor from './components/profesores/detallesProfesor';
+import MenuProfesores from './components/profesores/menuProfesores';
+import RegistroProfesor from './components/profesores/registroProfesor';
 
 export default function MainRoutes() {
     return(
@@ -40,6 +44,21 @@ export default function MainRoutes() {
             </Route>
             <Route path="/estudiantes/editar" >
                 <EditarEstudiante/>
+            </Route>
+            <Route exact path="/profesores">
+                <MenuProfesores/>
+            </Route>
+            <Route exact path="/profesores/lista">
+                <ListaProfesores/>
+            </Route>
+            <Route exact path="/profesores/registro">
+                <RegistroProfesor/>
+            </Route>
+            <Route path="/profesores/detalles/:idEstudiante" >
+                <DetallesProfesor/>
+            </Route>
+            <Route path="/profesores/editar" >
+                {/* <EditarProfesor/> */}
             </Route>
             <Route path="/error">
                 <h1>ERROR 503: Oops! La página que buscas no está disponible :(</h1>

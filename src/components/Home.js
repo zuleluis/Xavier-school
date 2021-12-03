@@ -37,21 +37,21 @@ export default function Home() {
                     imgText = "Xavier's School Teachers"
                     Title = "Profesores"
                     Description = "Gestion de Profesores"
-                    link = "nanai"
+                    link = "/profesores"
                 />
                 <Card
                     imgPath = "media/lessons.jpg"
                     imgText = "Xavier's School Lessons"
                     Title = "Lecciones"
                     Description = "Gestion de Lecciones"
-                    link = "nelpas"
+                    link = "/lecciones"
                 />
                 <Card
                     imgPath = "media/presentations.jpg"
                     imgText = "Xavier's School Presentations"
                     Title = "Presentaciones"
                     Description = "Gestion de Presentaciones"
-                    link = "naranjas"
+                    link = "/presentaciones"
                 />
             </Grid>
         </div>

@@ -19,7 +19,7 @@ import { Redirect, useLocation } from 'react-router-dom';
 
 const theme = createTheme();
 
-export default function RegistroEstudiante() {
+export default function EditarEstudiante() {
   const [idEstu, setIdEstu] = useState(0)
   const [pinta, setPinta] = useState(false)
   const [isFail, setIsFail] = useState(false)
