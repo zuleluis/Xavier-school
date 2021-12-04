@@ -42,7 +42,7 @@ export default function EditarProfesor() {
         apellidoProfesor : data.apellidoProfesor,
         fechaNacimientopr : fecha,
         nssProfesor: data.nssProfesor,
-        activo : data.activoOInactivo
+        activoOInactivo : data.activoOInactivo
     });
     setDefaultChecked(data.activoOInactivo === 1)
     setPinta(true);
