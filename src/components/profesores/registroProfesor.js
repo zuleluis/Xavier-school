@@ -72,19 +72,6 @@ export default function RegistroProfesor() {
   }
 
   const handleNext = () => {
-    /*if (activeStep + 1 === steps.length -1 && isFail === false) {
-      saveProfesor();
-    }
-    else{
-      if (activeStep + 1 === 1){
-        if (datos.nombreProfesor==="" || datos.apellidoProfesor=== "" || datos.fechaNacimientopr ==="") {
-          setIsFail(true)
-          console.log(isFail)
-          return;
-        }
-        //else setActiveStep(activeStep + 1);
-      }
-    }*/
     if (activeStep + 1 === steps.length - 1){
       if (datos.nombreProfesor==="" || datos.apellidoProfesor=== "" || datos.fechaNacimientopr ==="") {
         setIsFail(true)
