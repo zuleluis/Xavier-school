@@ -14,6 +14,7 @@ import ListaProfesores from './components/profesores/listaProfesores';
 import DetallesProfesor from './components/profesores/detallesProfesor';
 import MenuProfesores from './components/profesores/menuProfesores';
 import RegistroProfesor from './components/profesores/registroProfesor';
+import EditarProfesor from './components/profesores/editarProfesor';
 
 export default function MainRoutes() {
     return(
@@ -58,7 +59,7 @@ export default function MainRoutes() {
                 <DetallesProfesor/>
             </Route>
             <Route path="/profesores/editar" >
-                {/* <EditarProfesor/> */}
+                <EditarProfesor/>
             </Route>
             <Route path="/error">
                 <h1>ERROR 503: Oops! La página que buscas no está disponible :(</h1>
