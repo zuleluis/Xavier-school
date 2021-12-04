@@ -35,6 +35,7 @@ export default function Registro() {
     estadoAdministrador : "",
   });
   const [errorbd, setErrorbd] = useState(false)
+  const [saveUser, setSaveUser] = useState(false)
 
   const handleChange = e => {
 		const {name, value} = e.target;
@@ -61,6 +62,7 @@ export default function Registro() {
 			(response) => {
 			  if (response.status === 200) {
           setErrorbd(false);
+          setSaveUser(true);
 				}
 			},
 			(error) => {
@@ -71,6 +73,7 @@ export default function Registro() {
   }
 
   if(errorbd) return <Redirect to='/error'/>;
+  if(saveUser) return <Redirect to='/'/>;
 
   return (
     <ThemeProvider theme={theme}>

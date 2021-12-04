@@ -54,7 +54,7 @@ export default function MainRoutes() {
             <Route exact path="/profesores/registro">
                 <RegistroProfesor/>
             </Route>
-            <Route path="/profesores/detalles/:idEstudiante" >
+            <Route path="/profesores/detalles/:idProfesor" >
                 <DetallesProfesor/>
             </Route>
             <Route path="/profesores/editar" >
