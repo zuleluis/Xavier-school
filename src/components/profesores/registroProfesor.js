@@ -12,6 +12,7 @@ import axios from 'axios';
 import LinkButton from '../linkButton';
 import { Grid } from '@mui/material';
 import { Redirect, useLocation } from 'react-router-dom';
+import { TextField } from '@mui/material';
 
 const steps = ['Datos personales', 'Finalizar'];
 
@@ -19,49 +20,33 @@ const theme = createTheme();
 
 export default function RegistroProfesor() {
   const [activeStep, setActiveStep] = useState(0);
-  const [isFail, setIsFail] = useState(false);
   const [errorbd, setErrorbd] = useState(false);
+  const [isFail, setIsFail] = useState(false);
   const [datos, setDatos] = useState({
-    nombreEst : "",
-    apellidoEst : "",
-    nssEst : "",
-    fechaEst : "",
-    nivelEst : "",
-    poderes : []
+    nombreProfesor : "",
+    apellidoProfesor : "",
+    fechaNacimientopr : "",
+    nssProfesor : "",
   });
 
   const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
   const location = useLocation();
 
+  const handleChange = e => {
+		const {name, value} = e.target;
+		setDatos({
+		...datos,
+		[name] : value
+		})
+	};
 
-  function getStepContent(step) {
-    switch (step) {
-      case 0: return(
-            <Typography>
-                Vamos a registrar un profesor
-            </Typography>
-        );
-      case 1: return(
-          <Typography>
-              Registro concluido exitosamente
-          </Typography>
-      );
-      default:
-        throw new Error('Paso desconocido');
-    }
-  }
-
-  const saveEstudiante = () => {
-    /*axios.post ("http://localhost:5000/api/estudiantes/save", {
-      estudiante:  {
-        nombreEstudiante: datos.nombreEst,
-        apellidoEstudiante: datos.apellidoEst,
-        fechaNacimiento: datos.fechaEst,
-        nssEstudiante: datos.nssEst,
+  const saveProfesor = () => {
+    axios.post ("http://localhost:5000/api/profesores/save", {
+        nombreProfesor: datos.nombreProfesor,
+        apellidoProfesor: datos.apellidoProfesor,
+        fechaNacimientopr: datos.fechaNacimientopr,
+        nssProfesor: datos.nssProfesor,
         activoOInactivo: 1,
-        fkNivelpoderEst: datos.nivelEst
-      },
-      powers: datos.poderes
     },
     {
       headers : {
@@ -69,9 +54,9 @@ export default function RegistroProfesor() {
         'Authorization': `Bearer ${token}`
       }
     }).then ((response) => {
-      if (response.status === 200) {*/
+      if (response.status === 200) {
         setActiveStep(activeStep + 1)
-        /*setErrorbd(false);
+        setErrorbd(false);
       }
     }, (error) => {
       //console.log(error);
@@ -83,21 +68,29 @@ export default function RegistroProfesor() {
           setErrorbd(false);
         }
       }
-    })*/
+    })
   }
 
   const handleNext = () => {
-    if (activeStep + 1 === steps.length) {
-      saveEstudiante();
+    /*if (activeStep + 1 === steps.length -1 && isFail === false) {
+      saveProfesor();
     }
     else{
-      /*if (activeStep + 1 === 1){
-        if (datos.nombreEst==="" || datos.apellidoEst=== "" || datos.fechaEst ==="" || datos.nivelEst === "") {
+      if (activeStep + 1 === 1){
+        if (datos.nombreProfesor==="" || datos.apellidoProfesor=== "" || datos.fechaNacimientopr ==="") {
           setIsFail(true)
+          console.log(isFail)
           return;
         }
-      }*/
-      setActiveStep(activeStep + 1);
+        //else setActiveStep(activeStep + 1);
+      }
+    }*/
+    if (activeStep + 1 === steps.length - 1){
+      if (datos.nombreProfesor==="" || datos.apellidoProfesor=== "" || datos.fechaNacimientopr ==="") {
+        setIsFail(true)
+        return;
+      }
+      else saveProfesor();
     }
   };
 
@@ -131,26 +124,20 @@ export default function RegistroProfesor() {
             ))}
           </Stepper>
           <Fragment>
-            {activeStep === steps.length ? (
+            {activeStep === steps.length -1 ? (
               <Fragment>
                 <Typography variant="h4"> Profesor registrado exitosamente </Typography>
 
                 <Typography sx={{mb:2}}> Los siguientes datos fueron registrados: </Typography>
           
-                {/* <Typography variant="h5" component="div"> {datos.nombreEst} {datos.apellidoEst} </Typography> */}
+                <Typography variant="h5" component="div"> {datos.nombreProfesor} {datos.apellidoProfesor} </Typography>
                 <Typography sx={{ fontSize: 14, mb:3 }} color="text.secondary" gutterBottom> Nombre </Typography>
 
-                {/* <Typography variant="h5" component="div"> {datos.nivelEst} </Typography> */}
-                <Typography sx={{ fontSize: 14, mb:3 }} color="text.secondary" gutterBottom> Nivel de poder </Typography>
-
-                {/* <Typography variant="h5" component="div"> {datos.fechaEst} </Typography> */}
+                <Typography variant="h5" component="div"> {datos.fechaNacimientopr} </Typography>
                 <Typography sx={{ fontSize: 14, mb:3 }} color="text.secondary" gutterBottom> Fecha de Nacimiento </Typography>
 
-                {/* <Typography variant="h5" component="div"> {datos.nssEst === '' ? "--" : datos.nssEst} </Typography> */}
+                <Typography variant="h5" component="div"> {datos.nssProfesor === '' ? "--" : datos.nssProfesor} </Typography>
                 <Typography sx={{ fontSize: 14, mb:3 }} color="text.secondary" gutterBottom> Número de Seguridad Social </Typography>
-
-                {/* <Typography variant="h5" component="div"> {datos.poderes.length} </Typography> */}
-                <Typography sx={{ fontSize: 14, mb:3 }} color="text.secondary" gutterBottom> Cantidad de poderes </Typography>
 
                 <Grid container>
                   <LinkButton
@@ -170,7 +157,72 @@ export default function RegistroProfesor() {
               </Fragment>
             ) : (
               <Fragment>
-                {getStepContent(activeStep)}
+                <Fragment>
+                  <Typography variant="h6" gutterBottom>
+                    Datos Personales
+                  </Typography>
+
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        id="nombreProfesor"
+                        label="Nombre"
+                        fullWidth
+                        variant="outlined"
+                        name = "nombreProfesor"
+                        error={datos.nombreProfesor === "" && isFail}
+                        defaultValue={datos.nombreProfesor}
+                        onChange={handleChange}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        id="apellidoProfesor"
+                        label="Apellido"
+                        fullWidth
+                        variant="outlined"
+                        name = "apellidoProfesor"
+                        error={datos.apellidoProfesor === "" && isFail}
+                        defaultValue={datos.apellidoProfesor}
+                        onChange={handleChange}
+                      />
+                    </Grid>
+
+                    <Grid container spacing={3} margin={1} justifyContent="space-between">
+                      <Grid item xs={12} sm={5}>
+                        <TextField
+                          required
+                          id="fechaNacimientopr"
+                          label="Fecha de nacimiento" 
+                          type="date"
+                          variant="outlined"
+                          name="fechaNacimientopr"
+                          defaultValue={datos.fechaNacimientopr}
+                          error={datos.fechaNacimientopr === "" && isFail}
+                          onChange={handleChange}
+                          InputLabelProps={{shrink: true}}
+                          fullWidth
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={5}>
+                        <TextField
+                          id="nssProfesor"
+                          label="NSS"
+                          name="nssProfesor"
+                          variant="outlined"
+                          defaultValue={datos.nssProfesor}
+                          onChange={handleChange}
+                          fullWidth
+                          inputProps={{ maxLength: 10 }}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Fragment>
 
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Button
