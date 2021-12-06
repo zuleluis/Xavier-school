@@ -46,7 +46,7 @@ export default function TempDrawer(props) {
       onKeyDown={toggleDrawer(false)}
     >
         <List>
-            <Link className={classes.enlace} to="/about/us">
+            <Link className={classes.enlace} to="/about-us">
                 <ListItem button key="about-us">
                     <ListItemIcon>
                         <VolunteerActivismIcon/>
