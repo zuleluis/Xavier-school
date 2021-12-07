@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react'  
-import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,22 +7,19 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import { visuallyHidden } from '@mui/utils';
-import SortTable from '../../SortTable';
-import RegistroPoder from '../../poderes/registroPoder';
+import SortTable from '../../../SortTable';
 import { Redirect, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 const headCells = [
-  { id: 'nombrePoder', numeric: false, label: 'Poder' },
+  { id: 'nombreEstudiante', numeric: false, label: 'Estudiantes' },
 ]
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const { order, orderBy, onRequestSort } =
     props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -33,17 +28,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'Seleccionar todo',
-            }}
-          />
-        </TableCell>
+        <TableCell/>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -70,62 +55,11 @@ function EnhancedTableHead(props) {
   );
 }
 
-EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-};
-
-const EnhancedTableToolbar = (props) => {
-  const { numSelected } = props;
-
-  return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
-        backgroundColor: "#03506F", color:"white"}}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} seleccionados
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Poderes
-        </Typography>
-      )}
-    </Toolbar>
-  );
-};
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
-
-export default function DatosPoderes(props) {
+export default function DatosEstudiantes(props) {
   const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('idPoder');
+  const [orderBy, setOrderBy] = useState('idEstudiante');
   const [selected, setSelected] = useState([]);
-  const [poderes,setPoderes] = useState([]); 
-  const [refresh, setRefresh] = useState(true)
+  const [est, setEst] = useState([]);
   const [errorbd, setErrorbd] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
   const location = useLocation();
@@ -134,37 +68,6 @@ export default function DatosPoderes(props) {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
-  };
-
-  var all = [];
-  function handleInputText2 () {
-    console.log("Selecciona todo")
-
-    const all = poderes.map(p => p.idPoder);
-
-    if (all.length > props.datos.poderes.length) {
-      props.datos.poderes = all
-    } else {
-      props.datos.poderes = []
-    }
-
-    props.setDatos({
-      ...props.datos,
-      "poderes" : props.datos.poderes
-    })
-    console.log(props.datos.poderes)
-  };
-
-  const handleSelectAllClick = (event) => {
-
-    handleInputText2()
-
-    if (event.target.checked) {
-      const newSelecteds = poderes.map((n) => n.nombrePoder);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
   };
 
   const handleClick = (event, name) => {
@@ -191,49 +94,47 @@ export default function DatosPoderes(props) {
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   useEffect(() => {
-    if (refresh){
-      axios.get("http://localhost:5000/api/poderes/all", {
-        headers : {
-          'Content-type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      }).then (
-        (response) => {
-          if (response.status === 200) {
-            setPoderes(response.data);
-            setErrorbd(false);
-          }
-        },
-        (error) => {
-          if(!error.response) setErrorbd(true);
-          else{
-            if (error.response.status === 401) {
-              localStorage.removeItem("ACCESS_TOKEN");
-              setToken('');
-              setErrorbd(false);
-            }
-          }
-        }
-      );
-      setRefresh(false);
+    axios.get("http://localhost:5000/api/estudiantes/all", {
+    headers : {
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
     }
-  });
+    }).then (
+    (response) => {
+        if (response.status === 200) {
+        console.log(response.data)
+        setEst(response.data);
+        setErrorbd(false);
+        }
+    },
+    (error) => {
+        if(!error.response) setErrorbd(true);
+        else{
+            if (error.response.status === 401) {
+                localStorage.removeItem("ACCESS_TOKEN");
+                setToken('');
+                setErrorbd(false);
+            }
+        }
+    }
+    );
+  },[]);
 
   const handleInputText = (event) => {
-    var index = props.datos.poderes.indexOf(parseInt(event.target.value))
+    var index = props.datos.est.indexOf(event.target.value)
     if (index === -1) {
-      props.datos.poderes = props.datos.poderes.concat([parseInt(event.target.value)])
+      props.datos.est = props.datos.est.concat(event.target.value)
       console.log("Metio")
     } else {
-      props.datos.poderes.splice(index, 1)
-      props.datos.poderes = props.datos.poderes.concat([])
+      props.datos.est.splice(index, 1)
+      props.datos.est = props.datos.est.concat([])
       console.log("Saco")
     }
     props.setDatos({
-      ...props.datos,
-      "poderes" : props.datos.poderes
+        ...props.datos,
+        est : props.datos.est
     })
-    console.log(props.datos.poderes)
+    console.log(props.datos.est)
   };
 
   if(errorbd) return <Redirect to='/error'/>;
@@ -254,7 +155,6 @@ export default function DatosPoderes(props) {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%' }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -264,27 +164,26 @@ export default function DatosPoderes(props) {
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              value={all}
-              onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={poderes.length}
+              rowCount={est.length}
             />
             <TableBody>
-              {SortTable.stableSort(poderes, SortTable.getComparator(order, orderBy))
+              {SortTable.stableSort(est, SortTable.getComparator(order, orderBy))
+                .filter(row => row.activoOInactivo === 1)
                 .map((row, index) => {
-                  var isItemSelected = isSelected(row.nombrePoder);
+                  var isItemSelected = isSelected(row.idEstudiante);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
-                  isItemSelected = props.datos.poderes.indexOf(row.idPoder) === -1 ? false: true
+                  isItemSelected = props.datos.est.indexOf(row.idEstudiante) === -1 ? false: true
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.nombrePoder)}
+                      onClick={(event) => handleClick(event, row.idEstudiante)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.nombrePoder}
+                      key={row.idEstudiante}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -292,7 +191,7 @@ export default function DatosPoderes(props) {
                           color="primary"
                           checked={isItemSelected}
                           onChange={handleInputText}
-                          value={row.idPoder}
+                          value={row.idEstudiante}
                           inputProps={{
                             'aria-labelledby': labelId,
                           }}
@@ -304,7 +203,7 @@ export default function DatosPoderes(props) {
                         scope="row"
                         padding="none"
                       >
-                        {row.nombrePoder}
+                        {row.nombreEstudiante} {row.apellidoEstudiante}
                       </TableCell>
                     </TableRow>
                   );
@@ -313,7 +212,6 @@ export default function DatosPoderes(props) {
           </Table>
         </TableContainer>
       </Paper>
-      <RegistroPoder setRefresh={setRefresh}/>
     </Box>
   );
 }
