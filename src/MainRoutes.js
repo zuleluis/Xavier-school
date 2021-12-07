@@ -23,6 +23,7 @@ import RegistroLeccionpub from './components/lecciones/leccionesPublicas/registr
 import MenuLeccionesPriv from './components/lecciones/leccionesPrivadas/menuLeccionespriv';
 import ListaLeccionesPriv from './components/lecciones/leccionesPrivadas/listaLeccionesPrivadas';
 import DetallesLeccionpriv from './components/lecciones/leccionesPrivadas/detallesLeccionpriv';
+import RegistroLeccionpriv from './components/lecciones/leccionesPrivadas/registroLeccionpriv';
 
 export default function MainRoutes() {
     return(
@@ -92,6 +93,9 @@ export default function MainRoutes() {
             </Route>
             <Route path="/lecciones-privadas/detalles/:idLeccionpriv" >
                 <DetallesLeccionpriv/>
+            </Route>
+            <Route exact path="/lecciones-privadas/registro">
+                <RegistroLeccionpriv/>
             </Route>
             <Route path="/error">
                 <h1>ERROR 503: Oops! La página que buscas no está disponible :(</h1>

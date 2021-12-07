@@ -15,6 +15,7 @@ import axios from 'axios';
 
 const headCells = [
   { id: 'nombreLeccionpub', numeric: false, label: 'Nombre' },
+  { id: 'detalles', numeric: false }
 ]
 
 export default function ListaLeccionesPub (props) {
