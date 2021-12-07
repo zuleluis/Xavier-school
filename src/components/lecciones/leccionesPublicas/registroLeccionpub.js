@@ -126,9 +126,9 @@ export default function RegistroLeccionpub() {
     axios.post ("http://localhost:5000/api/lecGrupo/save", {
         lec:{
             nombreLeccionpub: datos.nombreLeccionpub,
-            fechaLeccionpu: datos.fechaLeccionpu,
-            FkProfesorLpub: datos.FkProfesorLpub
+            fechaLeccionpu: datos.fechaLeccionpu
         },
+        idProf: datos.FkProfesorLpub,
         est: datos.est,
         hour: datos.hour
     },
@@ -226,7 +226,7 @@ export default function RegistroLeccionpub() {
                 <Typography variant="h5" component="div"> {datos.fechaLeccionpu} </Typography>
                 <Typography sx={{ fontSize: 14, mb:3 }} color="text.secondary" gutterBottom> Fecha </Typography>
 
-                <Typography variant="h5" component="div"> {datos.fechaLeccionpu} </Typography>
+                <Typography variant="h5" component="div"> {datos.hour} </Typography>
                 <Typography sx={{ fontSize: 14, mb:3 }} color="text.secondary" gutterBottom> Hora </Typography>
 
                 <Grid container>
@@ -297,9 +297,6 @@ export default function RegistroLeccionpub() {
             )}
           </Fragment>
         </Paper>
-        <Typography>
-            {datos.nombreLeccionpub} | {datos.fechaLeccionpu} | {datos.hour} | Profesor - {datos.FkProfesorLpub} | Alumnos -{datos.est}
-        </Typography>
       </Container>
     </ThemeProvider>
   );

@@ -14,15 +14,15 @@ import { Link, Redirect, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 const headCells = [
-  { id: 'nombreLeccionpub', numeric: false, label: 'Nombre' },
+  { id: 'nombreLeccionpriv', numeric: false, label: 'Nombre' },
 ]
 
-export default function ListaLeccionesPub (props) {
+export default function ListaLeccionesPriv (props) {
   const [lecciones,setLecciones] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('idLeccionpub');
+  const [orderBy, setOrderBy] = useState('idLeccionpriv');
   const [errorbd, setErrorbd] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
   const location = useLocation();
@@ -43,7 +43,7 @@ export default function ListaLeccionesPub (props) {
   };
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/lecGrupo/all", {
+    axios.get("http://localhost:5000/api/lecPrivadas/all", {
       headers : {
         'Content-type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -100,10 +100,10 @@ export default function ListaLeccionesPub (props) {
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map ((item) =>{
               return( 
-                <TableRow key={item.idLeccionpub}>
-                  <TableCell>{item.nombreLeccionpub}</TableCell>
+                <TableRow key={item.idLeccionpriv}>
+                  <TableCell>{item.nombreLeccionpriv}</TableCell>
                   <TableCell>
-                    <Button variant="contained" component={Link} to={`/lecciones-publicas/detalles/${item.idLeccionpub}`} sx={{backgroundColor: "#03506F", color:"white"}}>
+                    <Button variant="contained" component={Link} to={`/lecciones-privadas/detalles/${item.idLeccionpriv}`} sx={{backgroundColor: "#03506F", color:"white"}}>
                       Detalles
                     </Button>
                   </TableCell>

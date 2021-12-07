@@ -20,6 +20,9 @@ import MenuLeccionesPub from './components/lecciones/leccionesPublicas/menuLecci
 import ListaLeccionesPub from './components/lecciones/leccionesPublicas/listaLeccionesPublicas';
 import DetallesLeccionpub from './components/lecciones/leccionesPublicas/detallesLeccionpub';
 import RegistroLeccionpub from './components/lecciones/leccionesPublicas/registroLeccionpub';
+import MenuLeccionesPriv from './components/lecciones/leccionesPrivadas/menuLeccionespriv';
+import ListaLeccionesPriv from './components/lecciones/leccionesPrivadas/listaLeccionesPrivadas';
+import DetallesLeccionpriv from './components/lecciones/leccionesPrivadas/detallesLeccionpriv';
 
 export default function MainRoutes() {
     return(
@@ -80,6 +83,15 @@ export default function MainRoutes() {
             </Route>
             <Route exact path="/lecciones-publicas/registro">
                 <RegistroLeccionpub/>
+            </Route>
+            <Route exact path="/lecciones-privadas">
+                <MenuLeccionesPriv/>
+            </Route>
+            <Route exact path="/lecciones-privadas/lista">
+                <ListaLeccionesPriv/>
+            </Route>
+            <Route path="/lecciones-privadas/detalles/:idLeccionpriv" >
+                <DetallesLeccionpriv/>
             </Route>
             <Route path="/error">
                 <h1>ERROR 503: Oops! La página que buscas no está disponible :(</h1>
