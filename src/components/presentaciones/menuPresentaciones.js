@@ -8,20 +8,20 @@ export default function MenuLecciones() {
             <Grid item xs={4} md={4}>
                 <Cards
                     imgPath = "media/students.jpg"
-                    imgText = "Public lessons"
-                    Title = "Lecciones públicas"
-                    Description = "Gestión de lecciones públicas"
-                    link = "/lecciones-publicas"
+                    imgText = "Presentations's list"
+                    Title = "Lista de presentaciones"
+                    Description = "Blablabla"
+                    link = "/presentaciones/lista"
                 />
             </Grid>
 
             <Grid item xs={4} md={4}>
                 <Cards
-                    imgPath = "media/students.jpg"
-                    imgText = "Private lessons"
-                    Title = "Lecciones privadas"
-                    Description = "Gestión de lecciones privadas"
-                    link = "/lecciones-privadas"
+                    imgPath = "media/teachers.jpg"
+                    imgText = "Add presentation"
+                    Title = "Registrar presentación"
+                    Description = "Ñaaaaa"
+                    link = "/presentaciones/registro"
                 />
             </Grid>
         </Grid>

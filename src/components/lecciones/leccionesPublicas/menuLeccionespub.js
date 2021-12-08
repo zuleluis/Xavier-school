@@ -5,7 +5,7 @@ import Cards from "../../Card";
 export default function MenuLeccionesPub() {
     return(
         <Grid container spacing={4} alignItems="center" justifyContent="center">
-            <Grid item>
+            <Grid item xs={4} md={4}>
                 <Cards
                     imgPath = "media/students.jpg"
                     imgText = "Public lessons"
@@ -15,7 +15,7 @@ export default function MenuLeccionesPub() {
                 />
             </Grid>
 
-            <Grid item>
+            <Grid item xs={4} md={4}>
                 <Cards
                     imgPath = "media/students.jpg"
                     imgText = "Public lessons 2"
