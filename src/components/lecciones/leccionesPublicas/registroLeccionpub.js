@@ -166,7 +166,7 @@ export default function RegistroLeccionpub() {
     }
     else{
       if (activeStep + 1 === 1){
-        if (datos.nombreLeccionpub ==="" || datos.fechaLeccionpu === "" ) {
+        if (datos.nombreLeccionpub ==="" || datos.fechaLeccionpu === "" || datos.hour === "" ) {
           setIsFail(true)
           return;
         }

@@ -13,32 +13,33 @@ import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import LinkButton from '../../linkButton';
 import { Grid } from '@mui/material';
 import { Redirect, useLocation } from 'react-router-dom';
 import { TextField } from '@mui/material';
-import DatosEstudiante from './controles/datosEstudiante';
-import DatosProfesores from './controles/datosProfesor';
+import LinkButton from '../linkButton';
+import DatosEstudiantes from './controles/datosEstudiantes';
 
-const steps = ['Datos de la lección', 'Selección de estudiantes', 'Selección de profesor'];
+const steps = ['Datos de la presentación', 'Selección de estudiantes', 'Selección de profesores'];
 
 const theme = createTheme();
 
-export default function RegistroLeccionpriv() {
+export default function RegistroPresentacion() {
   const [activeStep, setActiveStep] = useState(0);
   const [isFail, setIsFail] = useState(false);
   const [errorbd, setErrorbd] = useState(false);
   const [datos, setDatos] = useState({
-        nombreLeccionpriv : "",
-        fechaLeccionpriv : "",
-        FkEstudianteLpriv: "",
-        FkProfesorLpriv: "",
-        hora:""
+        nombrePresentacion: "",
+        fechaPresentacion: "",
+        hora: "",
   });
+  const [datosEstudiantes, setDatosEstudiantes] = useState([
+    [{
+      idEstudiante:"",
+      asistio:""
+    }]
+  ]);
   const [failEstudiante, setFailEstudiante] = useState(false);
   const [failProfesor, setFailProfesor] = useState(false);
-  const [flagEstudiantes, setFlagEstudiantes] = useState(false);
-  const [flagProfesores, setFlagProfesores] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
   const location = useLocation();
 
@@ -56,20 +57,20 @@ export default function RegistroLeccionpriv() {
           return(
             <Fragment>
               <Typography variant="h6" gutterBottom>
-                Datos de la lección
+                Datos de la presentación
               </Typography>
 
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     required
-                    id="nombreLeccionpriv"
+                    id="nombrePresentacion"
                     label="Nombre"
                     fullWidth
                     variant="outlined"
-                    name = "nombreLeccionpriv"
-                    error= { datos.nombreLeccionpriv === "" && isFail}
-                    defaultValue={datos.nombreLeccionpriv}
+                    name = "nombrePresentacion"
+                    error= { datos.nombrePresentacion === "" && isFail}
+                    defaultValue={datos.nombrePresentacion}
                     onChange={handleChange}
                   />
                 </Grid>
@@ -78,13 +79,13 @@ export default function RegistroLeccionpriv() {
                   <Grid item xs={12} sm={5}>
                     <TextField
                       required
-                      id="fechaLeccionpriv"
+                      id="fechaPresentacion"
                       label="Fecha" 
                       type="date"
                       variant="outlined"
-                      name="fechaLeccionpriv"
-                      defaultValue={datos.fechaLeccionpriv}
-                      error={datos.fechaLeccionpriv === "" && isFail}
+                      name="fechaPresentacion"
+                      defaultValue={datos.fechaPresentacion}
+                      error={datos.fechaPresentacion === "" && isFail}
                       onChange={handleChange}
                       InputLabelProps={{shrink: true}}
                       fullWidth
@@ -112,26 +113,31 @@ export default function RegistroLeccionpriv() {
           );
       case 1:
         return(
-            <DatosEstudiante setDatos={setDatos} datos={datos} flagEstudiantes={flagEstudiantes} setFlagEstudiantes={setFlagEstudiantes}/>
+            <DatosEstudiantes setDatosEstudiantes={setDatosEstudiantes} datosEstudiantes={datosEstudiantes}/>
         );
       case 2:
           return(
+            <Typography>
+                Datos de profesores
+            </Typography>
+          );
+          /*return(
               <DatosProfesores setDatos={setDatos} datos={datos} flagProfesores={flagProfesores} setFlagProfesores={setFlagProfesores}/>
-          )
+          )*/
       default:
         throw new Error('Paso desconocido');
     }
   }
 
-  const saveLeccion = () => {
-    axios.post ("http://localhost:5000/api/lecPrivadas/save", {
-        leccion:{
-            nombreLeccionpriv: datos.nombreLeccionpriv,
-            fechaLeccionpriv: datos.fechaLeccionpriv
+  const savePresentacion = () => {
+    axios.post ("http://localhost:5000/api/presentaciones/save", {
+        presentacion:{
+            nombrePresentacion: datos.nombrePresentacion,
+            fechaPresentacion: datos.fechaPresentacion
         },
-        idProf: datos.FkProfesorLpriv,
-        idEst: datos.FkEstudianteLpriv,
-        hora: datos.hora
+        estudiantes: datos.estudiantes,
+        profesores: datos.profesores,
+        hour: datos.hora
     },
     {
       headers : {
@@ -158,22 +164,22 @@ export default function RegistroLeccionpriv() {
 
   const handleNext = () => {
     if (activeStep + 1 === steps.length) {
-      if(datos.FkProfesorLpriv === ''){
+      if(datos.profesores.length === 0){
           setFailProfesor(true)
           return;
       }
       console.log("Todo listo para registrar")
-      saveLeccion();
+      savePresentacion();
     }
     else{
       if (activeStep + 1 === 1){
-        if (datos.nombreLeccionpriv ==="" || datos.fechaLeccionpriv === "" || datos.hora === "") {
+        if (datos.nombrePresentacion ==="" || datos.fechaPresentacion === "" || datos.hora === "") {
           setIsFail(true)
           return;
         }
       }
       if(activeStep + 1 === 2){
-        if(datos.FkEstudianteLpriv === ''){
+        if(datos.estudiantes.length === 0){
             setFailEstudiante(true)
             return;
           }
@@ -261,7 +267,7 @@ export default function RegistroLeccionpriv() {
                         <CloseIcon fontSize="inherit" />
                       </IconButton>
                     }
-                    severity="error">ERROR: Selecciona un estudiante
+                    severity="error">ERROR: Selecciona al menos un estudiante
                   </Alert>
                 </Collapse>
 
@@ -276,7 +282,7 @@ export default function RegistroLeccionpriv() {
                         <CloseIcon fontSize="inherit" />
                       </IconButton>
                     }
-                    severity="error">ERROR: Selecciona un profesor
+                    severity="error">ERROR: Selecciona al menos un profesor
                   </Alert>
                 </Collapse>
 
@@ -299,7 +305,7 @@ export default function RegistroLeccionpriv() {
           </Fragment>
         </Paper>
         <Typography>
-            {datos.nombreLeccionpriv} | {datos.fechaLeccionpriv} | {datos.hora}| {datos.FkEstudianteLpriv} | {datos.FkProfesorLpriv}
+            {datos.nombrePresentacion} | {datos.fechaPresentacion} | {datos.hora}| {datosEstudiantes.idEstudiante}, {datosEstudiantes.asistio} |
         </Typography>
       </Container>
     </ThemeProvider>
