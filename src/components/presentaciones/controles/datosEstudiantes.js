@@ -13,9 +13,15 @@ import { visuallyHidden } from '@mui/utils';
 import SortTable from '../../SortTable';
 import { Redirect, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { Typography } from '@material-ui/core';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
 
 const headCells = [
   { id: 'nombreEstudiante', numeric: false, label: 'Estudiantes' },
+  { id: 'asistencia', numeric: false},
 ]
 
 function EnhancedTableHead(props) {
@@ -60,6 +66,10 @@ export default function DatosEstudiantes(props) {
   const [orderBy, setOrderBy] = useState('idEstudiante');
   const [selected, setSelected] = useState([]);
   const [est, setEst] = useState([]);
+  const [guardaEstudiantes, setGuardaEstudiantes] = useState({
+    idEstudiante: [],
+    asistencia: ''
+  });
   const [errorbd, setErrorbd] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
   const location = useLocation();
@@ -121,24 +131,31 @@ export default function DatosEstudiantes(props) {
   },[]);
 
   const handleInputText = (event) => {
-    var index = props.datosEstudiantes.findIndex(i => i.idEstudiante === event.target.value)
-    const object = [event.target.value, 0]
+    var index = guardaEstudiantes.idEstudiante.indexOf(event.target.value)
     if (index === -1) {
-      props.datosEstudiantes.push(object)
+      guardaEstudiantes.idEstudiante = guardaEstudiantes.idEstudiante.concat(event.target.value)
       console.log("Metio")
     } else {
-      props.datosEstudiantes.splice(index, 1)
-      props.datosEstudiantes.push([])
+      guardaEstudiantes.asistencia = ''
+      guardaEstudiantes.idEstudiante.splice(index, 1)
+      guardaEstudiantes.idEstudiante = guardaEstudiantes.idEstudiante.concat([])
       console.log("Saco")
     }
-    
-    props.setDatosEstudiantes({
-        ...props.datosEstudiantes,
-        idEstudiante : props.datosEstudiantes.idEstudiante,
-        asistio : props.datosEstudiantes.asitio
+    setGuardaEstudiantes({
+        ...guardaEstudiantes,
+        idEstudiante : guardaEstudiantes.idEstudiante,
+        asistencia :  guardaEstudiantes.asistencia
     })
-    //console.log(props.datos.idEstudiante)
+    console.log(guardaEstudiantes.idEstudiante)
   };
+
+  const handleChange = e => {
+		const {name, value} = e.target;
+		setGuardaEstudiantes({
+		...guardaEstudiantes,
+		[name] : value
+		})
+	};	
 
   if(errorbd) return <Redirect to='/error'/>;
   if(!token){
@@ -177,8 +194,7 @@ export default function DatosEstudiantes(props) {
                   var isItemSelected = isSelected(row.idEstudiante);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
-                  //isItemSelected = props.datos.idEstudiante.indexOf(row.idEstudiante) === -1 ? false: true
-                  isItemSelected = props.datosEstudiantes.findIndex(i => i.idEstudiante === row.idEstudiante) === -1 ? false : true
+                  isItemSelected = guardaEstudiantes.idEstudiante.indexOf(row.idEstudiante) === -1 ? false: true
 
                   return (
                     <TableRow
@@ -209,12 +225,31 @@ export default function DatosEstudiantes(props) {
                       >
                         {row.nombreEstudiante} {row.apellidoEstudiante}
                       </TableCell>
+                      <TableCell>
+                      <FormControl fullWidth>
+                        <InputLabel id="label">Tipo de asistencia</InputLabel>
+                        <Select
+                          name="asistencia"
+                          label="Tipo de asistencia"
+                          labelId="label"
+                          id="asistencia"
+                          value={guardaEstudiantes.asistencia}
+                          onChange={handleChange}
+                        >
+                          <MenuItem value={0}>Asistente</MenuItem>
+                          <MenuItem value={1}>Participante</MenuItem>
+                        </Select>
+                      </FormControl>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
             </TableBody>
           </Table>
         </TableContainer>
+        <Typography>
+          {guardaEstudiantes.idEstudiante} - {guardaEstudiantes.asistencia}
+        </Typography>
       </Paper>
     </Box>
   );
