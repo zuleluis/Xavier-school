@@ -68,7 +68,9 @@ export default function DatosEstudiantes(props) {
   const [est, setEst] = useState([]);
   const [guardaEstudiantes, setGuardaEstudiantes] = useState({
     idEstudiante: [],
-    asistencia: ''
+  });
+  const [guardaAsistencia, setGuardaAsistencia] = useState({
+    asistencia: [],
   });
   const [errorbd, setErrorbd] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
@@ -136,7 +138,6 @@ export default function DatosEstudiantes(props) {
       guardaEstudiantes.idEstudiante = guardaEstudiantes.idEstudiante.concat(event.target.value)
       console.log("Metio")
     } else {
-      guardaEstudiantes.asistencia = ''
       guardaEstudiantes.idEstudiante.splice(index, 1)
       guardaEstudiantes.idEstudiante = guardaEstudiantes.idEstudiante.concat([])
       console.log("Saco")
@@ -144,15 +145,14 @@ export default function DatosEstudiantes(props) {
     setGuardaEstudiantes({
         ...guardaEstudiantes,
         idEstudiante : guardaEstudiantes.idEstudiante,
-        asistencia :  guardaEstudiantes.asistencia
     })
-    console.log(guardaEstudiantes.idEstudiante)
+    //console.log(guardaEstudiantes.idEstudiante)
   };
 
   const handleChange = e => {
 		const {name, value} = e.target;
-		setGuardaEstudiantes({
-		...guardaEstudiantes,
+		setGuardaAsistencia({
+		...guardaAsistencia,
 		[name] : value
 		})
 	};	
@@ -233,7 +233,7 @@ export default function DatosEstudiantes(props) {
                           label="Tipo de asistencia"
                           labelId="label"
                           id="asistencia"
-                          value={guardaEstudiantes.asistencia}
+                          value={guardaAsistencia.asistencia}
                           onChange={handleChange}
                         >
                           <MenuItem value={0}>Asistente</MenuItem>
@@ -248,7 +248,7 @@ export default function DatosEstudiantes(props) {
           </Table>
         </TableContainer>
         <Typography>
-          {guardaEstudiantes.idEstudiante} - {guardaEstudiantes.asistencia}
+          {guardaEstudiantes.idEstudiante} - {guardaAsistencia.asistencia}
         </Typography>
       </Paper>
     </Box>
