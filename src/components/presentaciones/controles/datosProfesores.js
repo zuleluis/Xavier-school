@@ -13,15 +13,9 @@ import { visuallyHidden } from '@mui/utils';
 import SortTable from '../../SortTable';
 import { Redirect, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { Typography } from '@material-ui/core';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 
 const headCells = [
-  { id: 'nombreEstudiante', numeric: false, label: 'Estudiantes' },
-  { id: 'asistencia', numeric: false},
+  { id: 'nombreProfesor', numeric: false, label: 'Profesores' },
 ]
 
 function EnhancedTableHead(props) {
@@ -61,11 +55,11 @@ function EnhancedTableHead(props) {
   );
 }
 
-export default function DatosEstudiantes(props) {
+export default function DatosProfesores(props) {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('idEstudiante');
   const [selected, setSelected] = useState([]);
-  const [est, setEst] = useState([]);
+  const [profesores, setProfesores] = useState([]);
   const [errorbd, setErrorbd] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
   const location = useLocation();
@@ -100,7 +94,7 @@ export default function DatosEstudiantes(props) {
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/estudiantes/all", {
+    axios.get("http://localhost:5000/api/profesores/all", {
     headers : {
         'Content-type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -109,7 +103,7 @@ export default function DatosEstudiantes(props) {
     (response) => {
         if (response.status === 200) {
         console.log(response.data)
-        setEst(response.data);
+        setProfesores(response.data);
         setErrorbd(false);
         }
     },
@@ -127,49 +121,20 @@ export default function DatosEstudiantes(props) {
   },[]);
 
   const handleInputText = (event) => {
-    var index = props.datos.estudiantes.indexOf(event.target.value)
+    var index = props.datos.profesores.indexOf(event.target.value)
     if (index === -1) {
-      props.datos.estudiantes = props.datos.estudiantes.concat([event.target.value])
+      props.datos.profesores = props.datos.profesores.concat(event.target.value)
       console.log("Metio")
     } else {
-      props.datos.estudiantes.splice(index, 1)
-      props.datos.estudiantes = props.datos.estudiantes.concat([])
+      props.datos.profesores.splice(index, 1)
+      props.datos.profesores = props.datos.profesores.concat([])
       console.log("Saco")
     }
     props.setDatos({
-      ...props.datos,
-      "estudiantes" : props.datos.estudiantes
+        ...props.datos,
+        profesores : props.datos.profesores
     })
-    //console.log(props.datos.estudiantes)
   };
-
-  const handleChange = (event) => {
-    var value = event.target.value
-    var id = value.substring(0, value.indexOf("|"))
-    var select = value.substring(value.indexOf("|")+1, value.length)
-
-    if (select === "1") {
-      var index = props.datos.asistentes.indexOf(id)
-      if (index === -1) {
-        props.datos.asistentes = props.datos.asistentes.concat([id])
-        console.log("Metio")
-      } else {
-        return;
-      }
-    } else {
-      var index = props.datos.asistentes.indexOf(id)
-      if (index === -1)
-        return;
-      props.datos.asistentes.splice(index, 1)
-      props.datos.asistentes = props.datos.asistentes.concat([])
-      console.log("Saco")
-    }
-    props.setDatos({
-      ...props.datos,
-      "asistentes" : props.datos.asistentes
-    })
-    console.log(props.datos.asistentes)
-	};	
 
   if(errorbd) return <Redirect to='/error'/>;
   if(!token){
@@ -199,25 +164,25 @@ export default function DatosEstudiantes(props) {
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
-              rowCount={est.length}
+              rowCount={profesores.length}
             />
             <TableBody>
-              {SortTable.stableSort(est, SortTable.getComparator(order, orderBy))
+              {SortTable.stableSort(profesores, SortTable.getComparator(order, orderBy))
                 .filter(row => row.activoOInactivo === 1)
                 .map((row, index) => {
-                  var isItemSelected = isSelected(row.idEstudiante);
+                  var isItemSelected = isSelected(row.idProfesor);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
-                  isItemSelected = props.datos.estudiantes.indexOf(row.idEstudiante) === -1 ? false: true
+                  isItemSelected = props.datos.profesores.indexOf(row.idProfesor) === -1 ? false: true
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.idEstudiante)}
+                      onClick={(event) => handleClick(event, row.idProfesor)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.idEstudiante}
+                      key={row.idProfesor}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -225,7 +190,7 @@ export default function DatosEstudiantes(props) {
                           color="primary"
                           checked={isItemSelected}
                           onChange={handleInputText}
-                          value={row.idEstudiante}
+                          value={row.idProfesor}
                           inputProps={{
                             'aria-labelledby': labelId,
                           }}
@@ -237,22 +202,7 @@ export default function DatosEstudiantes(props) {
                         scope="row"
                         padding="none"
                       >
-                        {row.nombreEstudiante} {row.apellidoEstudiante}
-                      </TableCell>
-                      <TableCell>
-                      <FormControl fullWidth>
-                        <InputLabel id="label">Tipo de asistencia</InputLabel>
-                        <Select
-                          name="asistencia"
-                          label="Tipo de asistencia"
-                          labelId="label"
-                          id="asistencia"
-                          onChange={handleChange}
-                        >
-                          <MenuItem value={row.idEstudiante.toString() + "|0"}>Asistente</MenuItem>
-                          <MenuItem value={row.idEstudiante.toString() + "|1"}>Participante</MenuItem>
-                        </Select>
-                      </FormControl>
+                        {row.nombreProfesor} {row.apellidoProfesor}
                       </TableCell>
                     </TableRow>
                   );

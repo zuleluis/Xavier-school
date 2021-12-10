@@ -18,6 +18,7 @@ import { Redirect, useLocation } from 'react-router-dom';
 import { TextField } from '@mui/material';
 import LinkButton from '../linkButton';
 import DatosEstudiantes from './controles/datosEstudiantes';
+import DatosProfesores from './controles/datosProfesores';
 
 const steps = ['Datos de la presentación', 'Selección de estudiantes', 'Selección de profesores'];
 
@@ -31,13 +32,10 @@ export default function RegistroPresentacion() {
         nombrePresentacion: "",
         fechaPresentacion: "",
         hora: "",
+        estudiantes : [],
+        asistentes : [],
+        profesores : []
   });
-  const [datosEstudiantes, setDatosEstudiantes] = useState([
-    [{
-      idEstudiante:"",
-      asistio:""
-    }]
-  ]);
   const [failEstudiante, setFailEstudiante] = useState(false);
   const [failProfesor, setFailProfesor] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
@@ -113,29 +111,31 @@ export default function RegistroPresentacion() {
           );
       case 1:
         return(
-            <DatosEstudiantes setDatosEstudiantes={setDatosEstudiantes} datosEstudiantes={datosEstudiantes}/>
+            <DatosEstudiantes setDatos={setDatos} datos={datos}/>
         );
       case 2:
-          return(
-            <Typography>
-                Datos de profesores
-            </Typography>
-          );
-          /*return(
-              <DatosProfesores setDatos={setDatos} datos={datos} flagProfesores={flagProfesores} setFlagProfesores={setFlagProfesores}/>
-          )*/
+            return (<DatosProfesores setDatos={setDatos} datos={datos}/>);
       default:
         throw new Error('Paso desconocido');
     }
   }
 
   const savePresentacion = () => {
+    var estuds = []
+    datos.estudiantes.map(item => {
+      if (datos.asistentes.indexOf(item) === -1) {
+        estuds = estuds.concat([[item, "0"]])
+      } else {
+        estuds = estuds.concat([[item, "1"]])
+      }
+    });
+    console.log(estuds)
     axios.post ("http://localhost:5000/api/presentaciones/save", {
         presentacion:{
             nombrePresentacion: datos.nombrePresentacion,
             fechaPresentacion: datos.fechaPresentacion
         },
-        estudiantes: datos.estudiantes,
+        estudiantes: estuds,
         profesores: datos.profesores,
         hour: datos.hora
     },
@@ -223,14 +223,14 @@ export default function RegistroPresentacion() {
           <Fragment>
             {activeStep === steps.length ? (
               <Fragment>
-                <Typography variant="h4"> Lección registrada exitosamente </Typography>
+                <Typography variant="h4"> Presentación registrada exitosamente </Typography>
 
                 <Typography sx={{mb:2}}> Los siguientes datos fueron registrados: </Typography>
           
-                <Typography variant="h5" component="div"> {datos.nombreLeccionpriv} </Typography>
+                <Typography variant="h5" component="div"> {datos.nombrePresentacion} </Typography>
                 <Typography sx={{ fontSize: 14, mb:3 }} color="text.secondary" gutterBottom> Nombre de la lección </Typography>
 
-                <Typography variant="h5" component="div"> {datos.fechaLeccionpriv} </Typography>
+                <Typography variant="h5" component="div"> {datos.fechaPresentacion} </Typography>
                 <Typography sx={{ fontSize: 14, mb:3 }} color="text.secondary" gutterBottom> Fecha </Typography>
 
                 <Typography variant="h5" component="div"> {datos.hora} </Typography>
@@ -238,8 +238,8 @@ export default function RegistroPresentacion() {
 
                 <Grid container>
                   <LinkButton
-                    link = '/lecciones'
-                    buttonText = "Lecciones"
+                    link = '/presentaciones'
+                    buttonText = "Presentaciones"
                     buttonColor = "#03506F"
                     size="small"
                   />
@@ -304,9 +304,6 @@ export default function RegistroPresentacion() {
             )}
           </Fragment>
         </Paper>
-        <Typography>
-            {datos.nombrePresentacion} | {datos.fechaPresentacion} | {datos.hora}| {datosEstudiantes.idEstudiante}, {datosEstudiantes.asistio} |
-        </Typography>
       </Container>
     </ThemeProvider>
   );
