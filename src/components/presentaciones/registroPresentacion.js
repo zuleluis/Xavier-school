@@ -19,6 +19,7 @@ import { TextField } from '@mui/material';
 import LinkButton from '../linkButton';
 import DatosEstudiantes from './controles/datosEstudiantes';
 import DatosProfesores from './controles/datosProfesores';
+import Snackbar from '@mui/material/Snackbar';
 
 const steps = ['Datos de la presentación', 'Selección de estudiantes', 'Selección de profesores'];
 
@@ -40,6 +41,7 @@ export default function RegistroPresentacion() {
   const [failProfesor, setFailProfesor] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
   const location = useLocation();
+  const [noAdmin, setNoAdmin] = useState(false)
 
   const handleChange = e => {
     const {name, value} = e.target;
@@ -47,6 +49,13 @@ export default function RegistroPresentacion() {
     ...datos,
     [name] : value
     })
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setNoAdmin(false);
   };
 
   function getStepContent(step) {
@@ -154,9 +163,14 @@ export default function RegistroPresentacion() {
       if(!error.response) setErrorbd(true);
       else{
         if (error.response.status === 401) {
-          localStorage.removeItem("ACCESS_TOKEN");
-          setToken('');
-          setErrorbd(false);
+          if(error.response.data){
+            setNoAdmin(true)
+          }
+          else{
+            localStorage.removeItem("ACCESS_TOKEN");
+            setToken('');
+            setErrorbd(false);
+          }
         }
       }
     })
@@ -303,6 +317,11 @@ export default function RegistroPresentacion() {
               </Fragment>
             )}
           </Fragment>
+          <Snackbar size="medium" open={noAdmin} autoHideDuration={4000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+              Usted no cuenta con permisos para realizar esta acción
+            </Alert>
+          </Snackbar>
         </Paper>
       </Container>
     </ThemeProvider>

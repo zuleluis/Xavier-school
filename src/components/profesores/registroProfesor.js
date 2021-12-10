@@ -13,6 +13,8 @@ import LinkButton from '../linkButton';
 import { Grid } from '@mui/material';
 import { Redirect, useLocation } from 'react-router-dom';
 import { TextField } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 const steps = ['Datos personales', 'Finalizar'];
 
@@ -22,6 +24,7 @@ export default function RegistroProfesor() {
   const [activeStep, setActiveStep] = useState(0);
   const [errorbd, setErrorbd] = useState(false);
   const [isFail, setIsFail] = useState(false);
+  const [noAdmin, setNoAdmin] = useState(false)
   const [datos, setDatos] = useState({
     nombreProfesor : "",
     apellidoProfesor : "",
@@ -39,6 +42,13 @@ export default function RegistroProfesor() {
 		[name] : value
 		})
 	};
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setNoAdmin(false);
+  };
 
   const saveProfesor = () => {
     axios.post ("http://localhost:5000/api/profesores/save", {
@@ -63,9 +73,14 @@ export default function RegistroProfesor() {
       if(!error.response) setErrorbd(true);
       else{
         if (error.response.status === 401) {
-          localStorage.removeItem("ACCESS_TOKEN");
-          setToken('');
-          setErrorbd(false);
+          if(error.response.data){
+            setNoAdmin(true)
+          }
+          else{
+            localStorage.removeItem("ACCESS_TOKEN");
+            setToken('');
+            setErrorbd(false);
+          }
         }
       }
     })
@@ -223,6 +238,11 @@ export default function RegistroProfesor() {
               </Fragment>
             )}
           </Fragment>
+          <Snackbar size="medium" open={noAdmin} autoHideDuration={4000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+              Usted no cuenta con permisos para realizar esta acción
+            </Alert>
+          </Snackbar>
         </Paper>
       </Container>
     </ThemeProvider>

@@ -19,6 +19,7 @@ import { Redirect, useLocation } from 'react-router-dom';
 import { TextField } from '@mui/material';
 import DatosEstudiante from './controles/datosEstudiante';
 import DatosProfesores from './controles/datosProfesor';
+import Snackbar from '@mui/material/Snackbar';
 
 const steps = ['Datos de la lección', 'Selección de estudiantes', 'Selección de profesor'];
 
@@ -41,6 +42,7 @@ export default function RegistroLeccionpriv() {
   const [flagProfesores, setFlagProfesores] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
   const location = useLocation();
+  const [noAdmin, setNoAdmin] = useState(false)
 
   const handleChange = e => {
     const {name, value} = e.target;
@@ -48,6 +50,13 @@ export default function RegistroLeccionpriv() {
     ...datos,
     [name] : value
     })
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setNoAdmin(false);
   };
 
   function getStepContent(step) {
@@ -148,9 +157,14 @@ export default function RegistroLeccionpriv() {
       if(!error.response) setErrorbd(true);
       else{
         if (error.response.status === 401) {
-          localStorage.removeItem("ACCESS_TOKEN");
-          setToken('');
-          setErrorbd(false);
+          if(error.response.data){
+            setNoAdmin(true)
+          }
+          else{
+            localStorage.removeItem("ACCESS_TOKEN");
+            setToken('');
+            setErrorbd(false);
+          }
         }
       }
     })
@@ -297,10 +311,12 @@ export default function RegistroLeccionpriv() {
               </Fragment>
             )}
           </Fragment>
+          <Snackbar size="medium" open={noAdmin} autoHideDuration={4000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+              Usted no cuenta con permisos para realizar esta acción
+            </Alert>
+          </Snackbar>
         </Paper>
-        <Typography>
-            {datos.nombreLeccionpriv} | {datos.fechaLeccionpriv} | {datos.hora}| {datos.FkEstudianteLpriv} | {datos.FkProfesorLpriv}
-        </Typography>
       </Container>
     </ThemeProvider>
   );

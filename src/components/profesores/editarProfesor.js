@@ -25,6 +25,7 @@ export default function EditarProfesor() {
   const [errorbd, setErrorbd] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
   const location = useLocation();
+  const [noAdmin, setNoAdmin] = useState(false)
   
   const [datos, setDatos] = useState({
     nombreProfesor : "",
@@ -203,6 +204,12 @@ export default function EditarProfesor() {
               Profesor actualizado
             </Alert>
           </Snackbar>
+
+          <Snackbar size="medium" open={noAdmin} autoHideDuration={4000} onClose={handleClose2}>
+            <Alert onClose={handleClose2} severity="error" sx={{ width: '100%' }}>
+              Usted no cuenta con permisos para realizar esta acción
+            </Alert>
+          </Snackbar>
         </Container>
       );
     }
@@ -232,6 +239,13 @@ export default function EditarProfesor() {
     setOpen(false);
   };
 
+  const handleClose2 = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setNoAdmin(false);
+  };
+
   const updateProfesor = () => {
     axios.post (`http://localhost:5000/api/profesores/update/${idProfesor}`, {
         nombreProfesor: datos.nombreProfesor,
@@ -250,7 +264,19 @@ export default function EditarProfesor() {
         console.log("Woo hoo");
       }
     }, (error) => {
-      console.log(error);
+        if(!error.response) setErrorbd(true);
+        else{
+          if (error.response.status === 401) {
+            if(error.response.data){
+              setNoAdmin(true)
+            }
+            else{
+              localStorage.removeItem("ACCESS_TOKEN");
+              setToken('');
+              setErrorbd(false);
+            }
+          }
+        }
     })
   }
 

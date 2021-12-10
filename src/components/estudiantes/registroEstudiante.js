@@ -18,6 +18,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import LinkButton from '../linkButton';
 import { Grid } from '@mui/material';
 import { Redirect, useLocation } from 'react-router-dom';
+import Snackbar from '@mui/material/Snackbar';
 
 const steps = ['Datos personales', 'Registro de poderes'];
 
@@ -28,6 +29,7 @@ export default function RegistroEstudiante() {
   const [isFail, setIsFail] = useState(false);
   const [failPoderes, setFailPoderes] = useState(false);
   const [errorbd, setErrorbd] = useState(false);
+  const [noAdmin, setNoAdmin] = useState(false)
   const [datos, setDatos] = useState({
     nombreEst : "",
     apellidoEst : "",
@@ -40,6 +42,12 @@ export default function RegistroEstudiante() {
   const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
   const location = useLocation();
 
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setNoAdmin(false);
+  };
 
   function getStepContent(step) {
     switch (step) {
@@ -79,9 +87,14 @@ export default function RegistroEstudiante() {
       if(!error.response) setErrorbd(true);
       else{
         if (error.response.status === 401) {
-          localStorage.removeItem("ACCESS_TOKEN");
-          setToken('');
-          setErrorbd(false);
+          if(error.response.data){
+            setNoAdmin(true)
+          }
+          else{
+            localStorage.removeItem("ACCESS_TOKEN");
+            setToken('');
+            setErrorbd(false);
+          }
         }
       }
     })
@@ -212,6 +225,11 @@ export default function RegistroEstudiante() {
               </Fragment>
             )}
           </Fragment>
+          <Snackbar size="medium" open={noAdmin} autoHideDuration={4000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+              Usted no cuenta con permisos para realizar esta acción
+            </Alert>
+          </Snackbar>
         </Paper>
       </Container>
     </ThemeProvider>

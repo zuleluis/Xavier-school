@@ -30,6 +30,7 @@ export default function EditarEstudiante() {
   const [open, setOpen] = useState(false)
   const [errorbd, setErrorbd] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
+  const [noAdmin, setNoAdmin] = useState(false)
   const location = useLocation();
   
   const [datos, setDatos] = useState({
@@ -78,7 +79,7 @@ export default function EditarEstudiante() {
             setDisabledSwitch(false);
           }
         }, (error1) => {
-          console.log(error1)
+          //console.log(error1)
         })
         setErrorbd(false);
       }
@@ -183,6 +184,12 @@ export default function EditarEstudiante() {
               Estudiante actualizado
             </Alert>
           </Snackbar>
+
+          <Snackbar size="medium" open={noAdmin} autoHideDuration={4000} onClose={handleClose2}>
+            <Alert onClose={handleClose2} severity="error" sx={{ width: '100%' }}>
+              Usted no cuenta con permisos para realizar esta acción
+            </Alert>
+          </Snackbar>
         </Container>
       );
     }
@@ -212,8 +219,15 @@ export default function EditarEstudiante() {
     setOpen(false);
   };
 
+  const handleClose2 = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setNoAdmin(false);
+  };
+
   const updateEstudiante = () => {
-    console.log(datos.activo)
+    //console.log(datos.activo)
     axios.post (`http://localhost:5000/api/estudiante/update/${idEstu}`, {
       estudiante:  {
         nombreEstudiante: datos.nombreEst,
@@ -233,9 +247,22 @@ export default function EditarEstudiante() {
     }).then ((response) => {
       if (response.status === 200) {
         console.log("Yeah men");
+        setOpen(true)
       }
     }, (error) => {
-      console.log(error);
+      if(!error.response) setErrorbd(true);
+        else{
+          if (error.response.status === 401) {
+            if(error.response.data){
+              setNoAdmin(true)
+            }
+            else{
+              localStorage.removeItem("ACCESS_TOKEN");
+              setToken('');
+              setErrorbd(false);
+            }
+          }
+        }
     })
   }
 
@@ -251,7 +278,7 @@ export default function EditarEstudiante() {
     if (bool)
       return;
 
-    setOpen(true)
+    //setOpen(true)
     updateEstudiante()
   }
 
@@ -268,7 +295,7 @@ export default function EditarEstudiante() {
       })
     }
     setDefaultChecked(datos.activo === 0)
-    console.log(defaultChecked)
+    //console.log(defaultChecked)
   }
   return (
     <ThemeProvider theme={theme}>
