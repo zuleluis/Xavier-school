@@ -13,7 +13,6 @@ import { visuallyHidden } from '@mui/utils';
 import SortTable from '../../SortTable';
 import { Redirect, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { Typography } from '@material-ui/core';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -157,7 +156,7 @@ export default function DatosEstudiantes(props) {
         return;
       }
     } else {
-      var index = props.datos.asistentes.indexOf(id)
+      index = props.datos.asistentes.indexOf(id)
       if (index === -1)
         return;
       props.datos.asistentes.splice(index, 1)

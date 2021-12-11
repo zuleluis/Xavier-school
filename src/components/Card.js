@@ -13,12 +13,12 @@ export default function Cards(props){
       <CardActionArea>
         <CardMedia
           component="img"
-          height="150"
+          height={props.altura}
           image= {props.imgPath}
           alt= {props.imgText}
         />
         <CardContent>
-          <Typography gutterBottom variant="h6" component="div" color="#000000">
+          <Typography gutterBottom variant="h6" component="div" color="#000000" align={props.alineacion}>
             {props.Title}
           </Typography>
           <Typography variant="body2" color="text.secondary">

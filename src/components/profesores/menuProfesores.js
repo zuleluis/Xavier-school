@@ -7,25 +7,22 @@ export default function MenuProfesores() {
     return(
         <div className={classes.mainDiv}>
             <ExtendedCard
-            imgPath = "media/students.jpg"
-            imgText = "Teacher's list"
-            Title = "Lista de profesores"
-            Description = "Blablabla"
-            link = "/profesores/lista"
+              imgPath = "media/list.jpg"
+              imgText = "Teacher's list"
+              Title = "Lista de profesores"
+              link = "/profesores/lista"
             />
             <ExtendedCard
-                imgPath = "media/teachers.jpg"
-                imgText = "Add teacher"
-                Title = "Registro de profesor"
-                Description = "Otro blablabla chido de los que se avienta Zule"
-                link = "/profesores/registro"
+              imgPath = "media/add.png"
+              imgText = "Add teacher"
+              Title = "Registro de profesor"
+              link = "/profesores/registro"
             />
             <ExtendedCard
-                imgPath = "media/lessons.jpg"
-                imgText = "Modify teacher"
-                Title = "Editar datos de profesor"
-                Description = "Un blablabla pero este de Saul :v"
-                link = "/profesores/editar"
+              imgPath = "media/edit.jpg"
+              imgText = "Modify teacher"
+              Title = "Editar datos de profesor"
+              link = "/profesores/editar"
             />
         </div>
     );

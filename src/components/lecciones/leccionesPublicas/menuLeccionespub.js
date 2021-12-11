@@ -7,21 +7,21 @@ export default function MenuLeccionesPub() {
         <Grid container spacing={4} alignItems="center" justifyContent="center">
             <Grid item xs={4} md={4}>
                 <Cards
-                    imgPath = "media/students.jpg"
+                    imgPath = "media/list.jpg"
                     imgText = "Public lessons"
                     Title = "Lista de lecciones"
-                    Description = "Shalala"
                     link = "/lecciones-publicas/lista"
+                    altura = "50"
                 />
             </Grid>
 
             <Grid item xs={4} md={4}>
                 <Cards
-                    imgPath = "media/students.jpg"
+                    imgPath = "media/add.png"
                     imgText = "Public lessons 2"
                     Title = "Registro de leccion"
-                    Description = "La neta ya estoy harta :l"
                     link = "/lecciones-publicas/registro"
+                    altura = "50"
                 />
             </Grid>
         </Grid>

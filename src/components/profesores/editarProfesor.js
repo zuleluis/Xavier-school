@@ -18,7 +18,6 @@ export default function EditarProfesor() {
   const [idProfesor, setIdProfesor] = useState(0)
   const [pinta, setPinta] = useState(false)
   const [isFail, setIsFail] = useState(false)
-  const [disabledSwitch, setDisabledSwitch] = useState(true)
   const [defaultChecked, setDefaultChecked] = useState(false)
   const [showForm, setShowForm] = useState(true)
   const [open, setOpen] = useState(false)
@@ -67,7 +66,6 @@ export default function EditarProfesor() {
       }
     }).then((response) => {
         setValues(response.data);
-        setDisabledSwitch(false);
     }, (error) => {
             if(!error.response) setErrorbd(true);
             else{

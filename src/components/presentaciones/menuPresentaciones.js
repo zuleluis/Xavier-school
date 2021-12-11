@@ -7,21 +7,21 @@ export default function MenuLecciones() {
         <Grid container spacing={4} alignItems="center" justifyContent="center">
             <Grid item xs={4} md={4}>
                 <Cards
-                    imgPath = "media/students.jpg"
+                    imgPath = "media/list.jpg"
                     imgText = "Presentations's list"
                     Title = "Lista de presentaciones"
-                    Description = "Blablabla"
                     link = "/presentaciones/lista"
+                    altura = "50"
                 />
             </Grid>
 
             <Grid item xs={4} md={4}>
                 <Cards
-                    imgPath = "media/teachers.jpg"
+                    imgPath = "media/add.png"
                     imgText = "Add presentation"
                     Title = "Registrar presentación"
-                    Description = "Ñaaaaa"
                     link = "/presentaciones/registro"
+                    altura = "50"
                 />
             </Grid>
         </Grid>

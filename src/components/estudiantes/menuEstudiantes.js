@@ -7,24 +7,21 @@ export default function MenuEstudiantes() {
     return(
         <div className={classes.mainDiv}>
             <ExtendedCard
-            imgPath = "media/students.jpg"
+            imgPath = "media/list.jpg"
             imgText = "Student's list"
             Title = "Lista de estudiantes"
-            Description = "Consulta de estudiantes"
             link = "/estudiantes/lista"
             />
             <ExtendedCard
-                imgPath = "media/teachers.jpg"
+                imgPath = "media/add.png"
                 imgText = "Add student"
                 Title = "Registro de estudiante"
-                Description = "Aqui debe ir algo de que agregas un estudiante y asi"
                 link = "/estudiantes/registro"
             />
             <ExtendedCard
-                imgPath = "media/lessons.jpg"
+                imgPath = "media/edit.jpg"
                 imgText = "Modify student"
                 Title = "Editar datos de estudiante"
-                Description = "Algo de editar datos"
                 link = "/estudiantes/editar"
             />
         </div>

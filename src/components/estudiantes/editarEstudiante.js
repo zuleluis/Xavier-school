@@ -23,7 +23,6 @@ export default function EditarEstudiante() {
   const [idEstu, setIdEstu] = useState(0)
   const [pinta, setPinta] = useState(false)
   const [isFail, setIsFail] = useState(false)
-  const [disabledSwitch, setDisabledSwitch] = useState(true)
   const [defaultChecked, setDefaultChecked] = useState(false)
   const [failPoderes, setFailPoderes] = useState(false)
   const [showForm, setShowForm] = useState(true)
@@ -76,7 +75,6 @@ export default function EditarEstudiante() {
         }).then((response1) => {
           if (response1.status === 200) {
             setValues(response.data, response1.data);
-            setDisabledSwitch(false);
           }
         }, (error1) => {
           //console.log(error1)

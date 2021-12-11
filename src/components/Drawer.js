@@ -13,7 +13,6 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import { Link } from "react-router-dom";
 import { Fragment } from "react";
-import Logout from "./login/logout";
 
 const useStyles = makeStyles({
   list: {

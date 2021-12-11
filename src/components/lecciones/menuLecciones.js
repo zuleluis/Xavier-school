@@ -5,23 +5,23 @@ import Cards from "../Card";
 export default function MenuLecciones() {
     return(
         <Grid container spacing={4} alignItems="center" justifyContent="center">
-            <Grid item xs={4} md={4}>
+            <Grid item md={4} >
                 <Cards
-                    imgPath = "media/students.jpg"
+                    imgPath = "media/public-lesson.jpg"
                     imgText = "Public lessons"
                     Title = "Lecciones públicas"
-                    Description = "Gestión de lecciones públicas"
                     link = "/lecciones-publicas"
+                    altura = "300"
                 />
             </Grid>
 
-            <Grid item xs={4} md={4}>
+            <Grid item md={4}>
                 <Cards
-                    imgPath = "media/students.jpg"
+                    imgPath = "media/private-lesson.jpg"
                     imgText = "Private lessons"
                     Title = "Lecciones privadas"
-                    Description = "Gestión de lecciones privadas"
                     link = "/lecciones-privadas"
+                    altura = "300"
                 />
             </Grid>
         </Grid>

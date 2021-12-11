@@ -26,32 +26,36 @@ export default function Home() {
         <div>
             <Grid container spacing={2}>
                 <Card
-                imgPath = "media/students.jpg"
-                imgText = "Xavier's School Studients"
-                Title = "Estudiantes"
-                Description = "Gestion de estudiantes"
-                link = "/estudiantes"
+                  imgPath = "media/students.jpg"
+                  imgText = "Xavier's School Studients"
+                  Title = "Estudiantes"
+                  link = "/estudiantes"
+                  alineacion = "center"
+                  altura = "150"
                 />
                 <Card
-                    imgPath = "media/teachers.jpg"
-                    imgText = "Xavier's School Teachers"
-                    Title = "Profesores"
-                    Description = "Gestion de Profesores"
-                    link = "/profesores"
+                  imgPath = "media/teachers.jpg"
+                  imgText = "Xavier's School Teachers"
+                  Title = "Profesores"
+                  link = "/profesores"
+                  alineacion = "center"
+                  altura = "150"
                 />
                 <Card
-                    imgPath = "media/lessons.jpg"
-                    imgText = "Xavier's School Lessons"
-                    Title = "Lecciones"
-                    Description = "Gestion de Lecciones"
-                    link = "/lecciones"
+                  imgPath = "media/lessons.jpg"
+                  imgText = "Xavier's School Lessons"
+                  Title = "Lecciones"
+                  link = "/lecciones"
+                  alineacion = "center"
+                  altura = "150"
                 />
                 <Card
-                    imgPath = "media/presentations.jpg"
-                    imgText = "Xavier's School Presentations"
-                    Title = "Presentaciones"
-                    Description = "Gestion de Presentaciones"
-                    link = "/presentaciones"
+                  imgPath = "media/presentations.jpg"
+                  imgText = "Xavier's School Presentations"
+                  Title = "Presentaciones"
+                  link = "/presentaciones"
+                  alineacion = "center"
+                  altura = "150"
                 />
             </Grid>
         </div>
